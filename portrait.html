@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, initial-scale=1.0">
+  <title>Big Boom Coffee Company — Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      width: 1080px;
+      height: 1920px;
+      font-family: 'Lato', sans-serif;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Header ───────────────────────────────────────────── */
+    #header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 36px;
+      background: linear-gradient(180deg, var(--brown-lg) 0%, var(--brown-md) 100%);
+      border-bottom: 3px solid var(--orange);
+      gap: 16px;
+    }
+
+    .hdr-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hdr-logo {
+      height: 80px;
+      width: auto;
+      border-radius: 6px;
+    }
+
+    .hdr-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 46px;
+      font-weight: 900;
+      color: var(--cream);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .hdr-title span { color: var(--orange); }
+
+    .hdr-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .hdr-clock {
+      font-family: 'Oswald', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1;
+    }
+
+    .hdr-hours {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      color: var(--sage-lt);
+      letter-spacing: 0.8px;
+      margin-top: 4px;
+    }
+
+    /* ── Two-column layout ────────────────────────────────── */
+    #columns {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+
+    .col {
+      padding: 28px 30px 20px;
+      overflow: hidden;
+      border-right: 2px solid var(--divider);
+    }
+
+    .col:last-child { border-right: none; }
+    .col:nth-child(2) { background: rgba(255,255,255,0.018); }
+
+    /* ── Section header ───────────────────────────────────── */
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .sec-note {
+      display: block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 19px;
+      font-weight: 400;
+      color: var(--sage-lt);
+      letter-spacing: 1.5px;
+      margin-top: 5px;
+    }
+
+    .sec-rule {
+      height: 2px;
+      background: linear-gradient(to right, var(--orange), transparent);
+      margin: 10px 0 18px;
+    }
+
+    /* ── Transition when right column switches ────────────── */
+    .col-right {
+      transition: opacity 0.6s ease;
+    }
+
+    .col-right.switching {
+      opacity: 0;
+    }
+
+    /* ── Sub-category label ───────────────────────────────── */
+    .sub-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sage-lt);
+      padding-bottom: 6px;
+      border-bottom: 1px dashed var(--divider);
+      margin: 16px 0 10px;
+    }
+
+    /* ── Menu item ────────────────────────────────────────── */
+    .item {
+      margin-bottom: 14px;
+    }
+
+    .item-top {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .item-name {
+      font-family: 'Lato', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--cream);
+      flex: 1;
+      line-height: 1.15;
+    }
+
+    .item-mod {
+      font-family: 'Lato', sans-serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--sage-lt);
+      flex-shrink: 0;
+    }
+
+    .item-price {
+      font-family: 'Oswald', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--orange);
+      flex-shrink: 0;
+    }
+
+    .item-sizes {
+      font-family: 'Lato', sans-serif;
+      font-size: 20px;
+      color: var(--cream-dim);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    .item-sizes b {
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    .item-desc {
+      font-family: 'Lato', sans-serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    /* ── LIT TEA special card ─────────────────────────────── */
+    .item.special {
+      background: linear-gradient(135deg,
+        rgba(212,113,42,0.14) 0%,
+        rgba(138,149,96,0.09) 100%);
+      border: 1px solid rgba(212,113,42,0.42);
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 0;
+    }
+
+    .item.special .item-name {
+      color: var(--orange-lt);
+      font-size: 32px;
+    }
+
+    .item.special .item-desc {
+      font-style: normal;
+      font-size: 18px;
+      margin-top: 6px;
+    }
+
+    .item-note {
+      font-family: 'Oswald', sans-serif;
+      font-size: 17px;
+      letter-spacing: 0.8px;
+      color: var(--sage-lt);
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header id="header">
+    <div class="hdr-brand">
+      <img src="Logo.jpeg" class="hdr-logo" alt="">
+      <div class="hdr-title">Big <span>Boom</span> Coffee</div>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-clock" id="clock">–</div>
+      <div class="hdr-hours">Open 5:00am – 2:00pm</div>
+    </div>
+  </header>
+
+  <div id="columns">
+    <!-- Left column: Coffee — always visible -->
+    <div class="col" id="col-left"></div>
+    <!-- Right column: Breakfast before 10:30am, Lunch after -->
+    <div class="col col-right" id="col-right"></div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/menu-data.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    // ── Clock & time check ────────────────────────────────
+    function tick() {
+      const d = new Date();
+      const h = d.getHours() % 12 || 12;
+      const m = String(d.getMinutes()).padStart(2, '0');
+      document.getElementById('clock').textContent =
+        `${h}:${m} ${d.getHours() >= 12 ? 'PM' : 'AM'}`;
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // Returns true after 10:30am
+    function isLunchTime() {
+      const d = new Date();
+      return d.getHours() * 60 + d.getMinutes() >= 630;
+    }
+
+    // ── Render helpers ────────────────────────────────────
+    function sizesHTML(sizes) {
+      return sizes.map(s => `${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ');
+    }
+
+    function itemHTML(item) {
+      const cls = ['item', item.special && 'special', item.soldOut && 'sold-out']
+        .filter(Boolean).join(' ');
+
+      if (item.sizes && item.sizes.length) {
+        return `
+          <div class="${cls}">
+            <div class="item-top">
+              <span class="item-name">${item.name}</span>
+              ${item.note ? `<span class="item-mod">${item.note}</span>` : ''}
+            </div>
+            <div class="item-sizes">${sizesHTML(item.sizes)}</div>
+          </div>`;
+      }
+
+      return `
+        <div class="${cls}">
+          <div class="item-top">
+            <span class="item-name">${item.name}</span>
+            ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
+            <span style="flex:1"></span>
+            ${item.price ? `<span class="item-price">$${item.price}</span>` : ''}
+          </div>
+          ${item.description ? `<div class="item-desc">${item.description}</div>` : ''}
+          ${item.note && !item.sizes ? `<div class="item-note">${item.note}</div>` : ''}
+        </div>`;
+    }
+
+    function sectionHTML(section) {
+      const visibleItems = section.items.filter(i => !i.hidden);
+      let html = `
+        <div class="sec-title">${section.title}</div>
+        ${section.note ? `<span class="sec-note">${section.note}</span>` : ''}
+        <div class="sec-rule"></div>`;
+
+      let lastSub = null;
+      visibleItems.forEach(item => {
+        if (item.subCategory && item.subCategory !== lastSub) {
+          lastSub = item.subCategory;
+          html += `<div class="sub-label">${item.subCategory}</div>`;
+        }
+        html += itemHTML(item);
+      });
+
+      return html;
+    }
+
+    // ── Render both columns ───────────────────────────────
+    let currentMenu = null;
+    let showingLunch = false;
+
+    function render(menu) {
+      currentMenu = menu;
+      const byId = {};
+      menu.sections.forEach(s => { byId[s.id] = s; });
+
+      // Left column: always Coffee
+      document.getElementById('col-left').innerHTML =
+        sectionHTML(byId['coffee']);
+
+      // Right column: Breakfast or Lunch based on time
+      const lunch = isLunchTime();
+      const rightSection = lunch ? byId['lunch'] : byId['breakfast'];
+      document.getElementById('col-right').innerHTML = sectionHTML(rightSection);
+      showingLunch = lunch;
+    }
+
+    // ── Check if column needs to switch ──────────────────
+    setInterval(() => {
+      if (!currentMenu) return;
+      const lunch = isLunchTime();
+      if (lunch !== showingLunch) {
+        // Fade out, swap, fade in
+        const col = document.getElementById('col-right');
+        col.classList.add('switching');
+        setTimeout(() => {
+          render(currentMenu);
+          col.classList.remove('switching');
+        }, 600);
+      }
+    }, 10000); // check every 10 seconds
+
+    // ── Firebase / data loading ───────────────────────────
+    if (firebaseConfig.apiKey !== 'YOUR_API_KEY') {
+      try {
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        db.ref('menu').on('value', snap => {
+          const raw = snap.val();
+          if (raw) {
+            render(normalizeMenu(raw));
+          } else {
+            db.ref('menu').set(DEFAULT_MENU);
+            render(DEFAULT_MENU);
+          }
+        }, () => render(DEFAULT_MENU));
+      } catch (e) {
+        render(DEFAULT_MENU);
+      }
+    } else {
+      render(DEFAULT_MENU);
+    }
+  </script>
+</body>
+</html>

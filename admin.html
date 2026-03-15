@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Big Boom — Menu Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #1a1208;
+      --surface:  #2a1a0a;
+      --surface2: #3a2412;
+      --border:   #5a3820;
+      --orange:   #d4712a;
+      --sage:     #8a9560;
+      --cream:    #f2e4c6;
+      --muted:    #a88c60;
+      --rust:     #c0392b;
+      --green:    #27ae60;
+      --radius:   8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--bg);
+      color: var(--cream);
+      min-height: 100vh;
+    }
+
+    /* ── Login screen ─────────────────────────────────────── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 48px 56px;
+      text-align: center;
+      width: 360px;
+    }
+
+    .login-box img {
+      height: 100px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .login-box h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--orange);
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .login-box p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .login-box input[type="password"] {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--cream);
+      font-size: 18px;
+      padding: 12px 16px;
+      text-align: center;
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+      outline: none;
+    }
+
+    .login-box input:focus {
+      border-color: var(--orange);
+    }
+
+    .login-error {
+      color: var(--rust);
+      font-size: 14px;
+      margin-top: -8px;
+      margin-bottom: 10px;
+      min-height: 18px;
+    }
+
+    /* ── Buttons ──────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      border: none;
+      font-family: 'Oswald', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary  { background: var(--orange); color: #fff; }
+    .btn-success  { background: var(--green);  color: #fff; }
+    .btn-danger   { background: var(--rust);   color: #fff; }
+    .btn-ghost    { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+    .btn-sm       { padding: 6px 14px; font-size: 13px; }
+    .btn-full     { width: 100%; justify-content: center; }
+
+    /* ── Admin app layout ─────────────────────────────────── */
+    #admin-app { display: none; }
+
+    .app-header {
+      background: var(--surface);
+      border-bottom: 2px solid var(--orange);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .app-header img {
+      height: 48px;
+      border-radius: 6px;
+    }
+
+    .app-header h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--orange);
+      letter-spacing: 1px;
+    }
+
+    .app-header .spacer { flex: 1; }
+
+    #save-status {
+      font-size: 14px;
+      color: var(--sage);
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.5px;
+      min-width: 120px;
+      text-align: right;
+    }
+
+    #save-status.error { color: var(--rust); }
+
+    /* ── Section tabs ─────────────────────────────────────── */
+    .tabs {
+      display: flex;
+      gap: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+    }
+
+    .tab {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 14px 24px;
+      cursor: pointer;
+      color: var(--muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.2s;
+    }
+
+    .tab:hover { color: var(--cream); }
+    .tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+    /* ── Content ──────────────────────────────────────────── */
+    .content {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 28px 24px;
+    }
+
+    /* ── Item list ────────────────────────────────────────── */
+    .item-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .item-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .item-row.sold-out-row { opacity: 0.5; }
+    .item-row:has(input:focus) { border-color: var(--orange); }
+
+    .item-row .drag-handle {
+      color: var(--muted);
+      cursor: grab;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .item-info { flex: 1; min-width: 0; }
+
+    .item-row .name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .item-row .desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .item-row .price-tag {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--orange);
+      flex-shrink: 0;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    /* ── Sub-category separator ───────────────────────────── */
+    .sub-sep {
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sage);
+      padding: 12px 4px 4px;
+      border-bottom: 1px dashed var(--border);
+      margin-bottom: 4px;
+    }
+
+    /* ── Edit modal ───────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 36px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal h2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--orange);
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .field { margin-bottom: 18px; }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field input, .field textarea, .field select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--cream);
+      font-family: 'Lato', sans-serif;
+      font-size: 16px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus { border-color: var(--orange); }
+
+    .field textarea { resize: vertical; min-height: 72px; }
+
+    .field-row { display: flex; gap: 14px; }
+    .field-row .field { flex: 1; }
+
+    /* sizes editor */
+    .sizes-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+    .size-row { display: flex; gap: 10px; align-items: center; }
+    .size-row input { padding: 8px 12px; font-size: 15px; }
+    .size-row input:first-child { flex: 1; }
+    .size-row input:last-of-type { width: 100px; }
+
+    /* toggle row */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 26px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle input:checked + .toggle-track { background: var(--rust); }
+    .toggle-track::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle input:checked + .toggle-track::before { transform: translateX(22px); }
+
+    .toggle-label { font-size: 15px; color: var(--cream); }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Add item button ──────────────────────────────────── */
+    .add-item-btn {
+      margin-top: 16px;
+    }
+
+    /* ── Firebase warning ─────────────────────────────────── */
+    .firebase-banner {
+      background: rgba(212,113,42,0.15);
+      border: 1px solid rgba(212,113,42,0.4);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--cream);
+      line-height: 1.5;
+    }
+
+    .firebase-banner strong { color: var(--orange); }
+  </style>
+</head>
+<body>
+
+<!-- ── Login ──────────────────────────────────────────────── -->
+<div id="login-screen">
+  <div class="login-box">
+    <img src="Logo.jpeg" alt="Big Boom Coffee">
+    <h1>Menu Admin</h1>
+    <p>Enter password to manage the menu</p>
+    <input type="password" id="pw-input" placeholder="••••••••"
+      onkeydown="if(event.key==='Enter') doLogin()">
+    <div class="login-error" id="pw-error"></div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">Sign In</button>
+  </div>
+</div>
+
+<!-- ── Admin app ───────────────────────────────────────────── -->
+<div id="admin-app">
+  <div class="app-header">
+    <img src="Logo.jpeg" alt="">
+    <h1>Menu Admin</h1>
+    <div class="spacer"></div>
+    <div id="save-status">Not connected</div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="content">
+    <div id="firebase-banner-area"></div>
+    <div class="item-list" id="item-list"></div>
+    <button class="btn btn-success add-item-btn" onclick="openAddModal()">+ Add Item</button>
+  </div>
+</div>
+
+<!-- ── Edit / Add modal ────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <h2 id="modal-title">Edit Item</h2>
+
+    <div class="field">
+      <label>Item Name</label>
+      <input type="text" id="f-name" placeholder="e.g. Breakfast Burrito">
+    </div>
+
+    <div id="single-price-area">
+      <div class="field-row">
+        <div class="field">
+          <label>Price</label>
+          <input type="text" id="f-price" placeholder="e.g. 6.49">
+        </div>
+        <div class="field">
+          <label>Sub-category (optional)</label>
+          <input type="text" id="f-subcat" placeholder="e.g. Bakery">
+        </div>
+      </div>
+      <div class="field">
+        <label>Description (optional)</label>
+        <textarea id="f-desc" placeholder="e.g. Eggs, Cheese, Bacon or Sausage"></textarea>
+      </div>
+    </div>
+
+    <div id="sizes-area" style="display:none">
+      <div class="field">
+        <label>Modifier / Note (optional)</label>
+        <input type="text" id="f-note" placeholder="e.g. Hot or Iced">
+      </div>
+      <div class="field">
+        <label>Sizes & Prices</label>
+        <div class="sizes-list" id="sizes-list"></div>
+        <button class="btn btn-ghost btn-sm" onclick="addSizeRow()">+ Add Size</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>
+        <input type="checkbox" id="f-has-sizes" onchange="toggleSizesMode(this.checked)"
+          style="margin-right:6px">
+        This item has multiple sizes (coffee-style)
+      </label>
+    </div>
+
+    <div class="field">
+      <label>Badge (optional)</label>
+      <input type="text" id="f-badge" placeholder="e.g. Coming Soon!">
+    </div>
+
+    <div class="toggle-row">
+      <label class="toggle">
+        <input type="checkbox" id="f-soldout">
+        <div class="toggle-track"></div>
+      </label>
+      <span class="toggle-label">Mark as Sold Out</span>
+    </div>
+
+    <div class="toggle-row">
+      <label class="toggle">
+        <input type="checkbox" id="f-hidden">
+        <div class="toggle-track"></div>
+      </label>
+      <span class="toggle-label">Hide from menu (keep but don't display)</span>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="delete-btn" onclick="deleteItem()" style="display:none">Delete</button>
+      <button class="btn btn-primary" onclick="saveItem()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/menu-data.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+  // ── State ───────────────────────────────────────────────
+  let db = null;
+  let menu = JSON.parse(JSON.stringify(DEFAULT_MENU)); // deep copy
+  let activeSectionIndex = 0;
+  let editingItemId = null;  // null = adding new
+
+  // ── Login ───────────────────────────────────────────────
+  function doLogin() {
+    const val = document.getElementById('pw-input').value;
+    if (val === ADMIN_PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-app').style.display = 'block';
+      initFirebase();
+    } else {
+      document.getElementById('pw-error').textContent = 'Incorrect password.';
+      document.getElementById('pw-input').value = '';
+    }
+  }
+
+  // ── Firebase ────────────────────────────────────────────
+  function initFirebase() {
+    const status = document.getElementById('save-status');
+
+    if (firebaseConfig.apiKey === 'YOUR_API_KEY') {
+      document.getElementById('firebase-banner-area').innerHTML = `
+        <div class="firebase-banner">
+          <strong>Firebase not configured.</strong> Changes made here will NOT sync to the TVs
+          until you set up Firebase. See <code>SETUP.md</code> for instructions.
+          You can still preview how the menu looks.
+        </div>`;
+      status.textContent = 'Local only';
+      buildUI(menu);
+      return;
+    }
+
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+
+      db.ref('menu').on('value', snap => {
+        const raw = snap.val();
+        if (raw) {
+          menu = normalizeMenu(raw);
+        } else {
+          menu = JSON.parse(JSON.stringify(DEFAULT_MENU));
+          db.ref('menu').set(menu);
+        }
+        buildUI(menu);
+        status.textContent = 'Live — changes save instantly';
+        status.className = '';
+      }, err => {
+        status.textContent = 'Connection error';
+        status.className = 'error';
+        buildUI(menu);
+      });
+    } catch (e) {
+      status.textContent = 'Firebase error';
+      status.className = 'error';
+      buildUI(menu);
+    }
+  }
+
+  function saveToFirebase() {
+    if (!db) return;
+    db.ref('menu').set(menu);
+  }
+
+  // ── UI ──────────────────────────────────────────────────
+  function buildUI(m) {
+    buildTabs(m);
+    renderSection(activeSectionIndex);
+  }
+
+  function buildTabs(m) {
+    const tabs = document.getElementById('tabs');
+    tabs.innerHTML = '';
+    m.sections.forEach((sec, i) => {
+      const tab = document.createElement('div');
+      tab.className = 'tab' + (i === activeSectionIndex ? ' active' : '');
+      tab.textContent = sec.title;
+      tab.onclick = () => { activeSectionIndex = i; buildUI(menu); };
+      tabs.appendChild(tab);
+    });
+  }
+
+  function renderSection(secIndex) {
+    const section = menu.sections[secIndex];
+    const list = document.getElementById('item-list');
+    list.innerHTML = '';
+
+    let lastSub = null;
+    section.items.forEach(item => {
+      if (item.subCategory && item.subCategory !== lastSub) {
+        lastSub = item.subCategory;
+        const sep = document.createElement('div');
+        sep.className = 'sub-sep';
+        sep.textContent = item.subCategory;
+        list.appendChild(sep);
+      }
+
+      const row = document.createElement('div');
+      row.className = 'item-row' + (item.soldOut ? ' sold-out-row' : '');
+
+      const priceDisplay = item.sizes && item.sizes.length
+        ? item.sizes.map(s => `${s.label} $${s.price}`).join(' · ')
+        : (item.price ? `$${item.price}` : (item.badge || ''));
+
+      row.innerHTML = `
+        <div class="item-info">
+          <div class="name">${item.name}${item.hidden ? ' <span style="color:var(--muted);font-size:12px;">[hidden]</span>' : ''}</div>
+          <div class="desc">${item.description || item.note || ''}</div>
+        </div>
+        <div class="price-tag">${priceDisplay}</div>
+        <div class="item-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openEditModal('${item.id}')">Edit</button>
+          ${item.soldOut
+            ? `<button class="btn btn-success btn-sm" onclick="toggleSoldOut('${item.id}', false)">Available</button>`
+            : `<button class="btn btn-danger btn-sm" onclick="toggleSoldOut('${item.id}', true)">Sold Out</button>`
+          }
+        </div>`;
+
+      list.appendChild(row);
+    });
+  }
+
+  // ── Sold out quick-toggle ────────────────────────────────
+  function toggleSoldOut(itemId, val) {
+    findItem(itemId).soldOut = val || undefined;
+    saveToFirebase();
+    renderSection(activeSectionIndex);
+  }
+
+  // ── Modal ────────────────────────────────────────────────
+  function openAddModal() {
+    editingItemId = null;
+    document.getElementById('modal-title').textContent = 'Add Item';
+    document.getElementById('delete-btn').style.display = 'none';
+    clearForm();
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function openEditModal(itemId) {
+    editingItemId = itemId;
+    const item = findItem(itemId);
+    document.getElementById('modal-title').textContent = 'Edit Item';
+    document.getElementById('delete-btn').style.display = '';
+    populateForm(item);
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== document.getElementById('modal-overlay')) return;
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  function clearForm() {
+    ['f-name','f-price','f-desc','f-note','f-badge','f-subcat'].forEach(id =>
+      document.getElementById(id).value = '');
+    document.getElementById('f-soldout').checked = false;
+    document.getElementById('f-hidden').checked = false;
+    document.getElementById('f-has-sizes').checked = false;
+    toggleSizesMode(false);
+    document.getElementById('sizes-list').innerHTML = '';
+    addSizeRow();
+  }
+
+  function populateForm(item) {
+    document.getElementById('f-name').value = item.name || '';
+    document.getElementById('f-badge').value = item.badge || '';
+    document.getElementById('f-soldout').checked = !!item.soldOut;
+    document.getElementById('f-hidden').checked = !!item.hidden;
+
+    const hasSizes = !!(item.sizes && item.sizes.length);
+    document.getElementById('f-has-sizes').checked = hasSizes;
+    toggleSizesMode(hasSizes);
+
+    if (hasSizes) {
+      document.getElementById('f-note').value = item.note || '';
+      document.getElementById('sizes-list').innerHTML = '';
+      item.sizes.forEach(s => addSizeRow(s.label, s.price));
+    } else {
+      document.getElementById('f-price').value = item.price || '';
+      document.getElementById('f-desc').value = item.description || '';
+      document.getElementById('f-subcat').value = item.subCategory || '';
+    }
+  }
+
+  function toggleSizesMode(on) {
+    document.getElementById('single-price-area').style.display = on ? 'none' : '';
+    document.getElementById('sizes-area').style.display = on ? '' : 'none';
+  }
+
+  function addSizeRow(label='', price='') {
+    const row = document.createElement('div');
+    row.className = 'size-row';
+    row.innerHTML = `
+      <input type="text" placeholder="Label (e.g. 12oz)" value="${label}">
+      <input type="text" placeholder="Price (e.g. 4.49)" value="${price}">
+      <button class="btn btn-ghost btn-sm" onclick="this.parentElement.remove()">✕</button>`;
+    document.getElementById('sizes-list').appendChild(row);
+  }
+
+  function saveItem() {
+    const name = document.getElementById('f-name').value.trim();
+    if (!name) { alert('Item name is required.'); return; }
+
+    const hasSizes = document.getElementById('f-has-sizes').checked;
+    const section = menu.sections[activeSectionIndex];
+
+    let itemData;
+    if (hasSizes) {
+      const sizeRows = document.querySelectorAll('#sizes-list .size-row');
+      const sizes = [];
+      sizeRows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        const lbl = inputs[0].value.trim();
+        const prc = inputs[1].value.trim();
+        if (lbl && prc) sizes.push({ label: lbl, price: prc });
+      });
+      itemData = {
+        id: editingItemId || slugify(name),
+        name,
+        note: document.getElementById('f-note').value.trim() || undefined,
+        sizes
+      };
+    } else {
+      itemData = {
+        id: editingItemId || slugify(name),
+        name,
+        price: document.getElementById('f-price').value.trim() || undefined,
+        description: document.getElementById('f-desc').value.trim() || undefined,
+        subCategory: document.getElementById('f-subcat').value.trim() || undefined,
+        badge: document.getElementById('f-badge').value.trim() || undefined
+      };
+    }
+
+    if (document.getElementById('f-soldout').checked) itemData.soldOut = true;
+    if (document.getElementById('f-hidden').checked) itemData.hidden = true;
+
+    // Remove undefined keys
+    Object.keys(itemData).forEach(k => itemData[k] === undefined && delete itemData[k]);
+
+    if (editingItemId) {
+      const idx = section.items.findIndex(i => i.id === editingItemId);
+      if (idx !== -1) section.items[idx] = itemData;
+    } else {
+      section.items.push(itemData);
+    }
+
+    saveToFirebase();
+    renderSection(activeSectionIndex);
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  function deleteItem() {
+    if (!confirm('Delete this item? This cannot be undone.')) return;
+    const section = menu.sections[activeSectionIndex];
+    section.items = section.items.filter(i => i.id !== editingItemId);
+    saveToFirebase();
+    renderSection(activeSectionIndex);
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  // ── Helpers ──────────────────────────────────────────────
+  function findItem(id) {
+    for (const sec of menu.sections)
+      for (const item of sec.items)
+        if (item.id === id) return item;
+    return null;
+  }
+
+  function slugify(str) {
+    return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+</script>
+</body>
+</html>

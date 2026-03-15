@@ -1,0 +1,20 @@
+# Claude workspace
+.claude/
+
+# Firebase Functions dependencies
+functions/node_modules/
+
+# Firebase local emulator data
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Environment / secrets
+.env
+.env.local
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
