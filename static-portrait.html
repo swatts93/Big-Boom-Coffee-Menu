@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!--
+  STATIC PORTRAIT MENU — no server or Firebase needed.
+  Open in Chrome → F11 for fullscreen on the vertical TV.
+  To export as image: Chrome → Print → Save as PDF, then convert to PNG.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, initial-scale=1.0">
+  <title>Big Boom Coffee Company — Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange:    #e07828;
+      --orange-lt: #f0983c;
+      --sage:      #8a9560;
+      --sage-lt:   #b8c88a;
+      --bg:        #080401;
+      --surface:   #1a1008;
+      --surface2:  #2a1a0c;
+      --divider:   rgba(224,120,40,0.30);
+      --text:      #ffffff;
+      --muted:     #e0c898;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    #header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 36px;
+      background: linear-gradient(180deg, var(--surface2) 0%, var(--surface) 100%);
+      border-bottom: 3px solid var(--orange);
+      gap: 16px;
+    }
+    .hdr-brand { display: flex; align-items: center; gap: 16px; }
+    .hdr-logo  { height: 80px; border-radius: 6px; }
+    .hdr-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 46px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .hdr-title span { color: var(--orange); }
+    .hdr-hours {
+      font-family: 'Oswald', sans-serif;
+      font-size: 22px;
+      color: var(--sage-lt);
+      letter-spacing: 0.8px;
+      text-align: right;
+    }
+
+    /* ── Two-column layout ──────────────────────────────── */
+    #columns {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      position: relative;
+    }
+    #columns::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('Logo.jpeg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .col {
+      padding: 28px 26px 20px;
+      border-right: 2px solid var(--divider);
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .col:last-child { border-right: none; }
+    .col:nth-child(2) { background: rgba(255,255,255,0.012); }
+
+    /* ── Section header ─────────────────────────────────── */
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+    .sec-note {
+      display: block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      color: var(--sage-lt);
+      letter-spacing: 1.5px;
+      margin-top: 5px;
+    }
+    .sec-rule {
+      height: 2px;
+      background: linear-gradient(to right, var(--orange), transparent);
+      margin: 10px 0 14px;
+    }
+    .sub-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sage-lt);
+      padding-bottom: 5px;
+      border-bottom: 1px dashed var(--divider);
+      margin: 10px 0 8px;
+    }
+
+    /* ── Items ───────────────────────────────────────────── */
+    .item { margin-bottom: 13px; }
+    .item-top { display: flex; align-items: baseline; gap: 6px; }
+    .item-name {
+      font-family: 'Lato', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      flex: 1;
+      line-height: 1.15;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+    }
+    .item-mod {
+      font-family: 'Lato', sans-serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--sage-lt);
+    }
+    .item-price {
+      font-family: 'Oswald', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--orange);
+      text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+    }
+    .item-sizes {
+      font-family: 'Lato', sans-serif;
+      font-size: 20px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .item-sizes b { color: var(--orange); font-weight: 700; }
+    .item-desc {
+      font-family: 'Lato', sans-serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+    .item.special {
+      background: linear-gradient(135deg, rgba(224,120,40,0.14), rgba(138,149,96,0.09));
+      border: 1px solid rgba(224,120,40,0.42);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 0;
+    }
+    .item.special .item-name { color: var(--orange-lt); font-size: 32px; }
+    .item.special .item-desc { font-style: normal; font-size: 18px; margin-top: 6px; }
+    .item-note {
+      font-family: 'Oswald', sans-serif;
+      font-size: 17px;
+      letter-spacing: 0.8px;
+      color: var(--sage-lt);
+      margin-top: 5px;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--sage);
+      color: var(--bg);
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 9px;
+      border-radius: 3px;
+      margin-left: 6px;
+    }
+    .sold-out { opacity: 0.38; }
+  </style>
+</head>
+<body>
+
+<header id="header">
+  <div class="hdr-brand">
+    <img src="Logo.jpeg" class="hdr-logo" alt="">
+    <div class="hdr-title">Big <span>Boom</span> Coffee</div>
+  </div>
+  <div class="hdr-hours">Open 5:00am – 2:00pm</div>
+</header>
+
+<div id="columns"></div>
+
+<script>
+  const COFFEE = {id:"coffee",title:"Coffee & Drinks",note:null,items:[{id:"drip-coffee",name:"Drip Coffee",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"2.99"},{label:"20oz",price:"3.49"},{label:"24oz",price:"3.99"}]},{id:"americano",name:"Americano",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"3.99"}]},{id:"espresso",name:"Espresso",sizes:[{label:"Single",price:"2.99"},{label:"Double",price:"4.99"}]},{id:"latte",name:"Latte",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},{id:"mocha",name:"Mocha",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},{id:"cappuccino",name:"Cappuccino",sizes:[{label:"12oz",price:"4.49"}]},{id:"mocha-frappe",name:"Mocha Frappe",sizes:[{label:"16oz",price:"5.75"},{label:"20oz",price:"6.75"}]},{id:"tea",name:"Tea",sizes:[{label:"16oz",price:"2.49"},{label:"20oz",price:"2.79"},{label:"32oz",price:"3.49"}]},{id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"Cherry Boom · Firecracker Punch · Blue Bomb · Fourth of July",note:"Levels: No Lit · Not So Lit · Lit · Boosted",special:true}]};
+  const BREAKFAST = {id:"breakfast",title:"Breakfast",note:"Served 5:00am – 10:30am",items:[{id:"breakfast-burrito",name:"Breakfast Burrito",price:"6.49",description:"Eggs, Cheese, Bacon or Sausage"},{id:"big-boom-burrito",name:"Big Boom Burrito",price:"6.99",description:"Eggs, Sausage, Bacon, Cheese, Gravy, Potatoes"},{id:"breakfast-bowl",name:"Breakfast Bowl",price:"6.99",description:"Eggs, Cheese, Bacon or Sausage"},{id:"big-breakfast-bowl",name:"Big Breakfast Bowl",price:"7.99",description:"Eggs, Sausage, Bacon, Cheese, Gravy, Potatoes"},{id:"biscuits-gravy",name:"Biscuits & Gravy Bowl",price:"7.49",description:"Biscuit, Eggs, Gravy, Cheese"},{id:"bacon-grits",name:"Bacon & Grits Bowl",price:"7.49",description:"Grits, Bacon, Cheese, Eggs"},{id:"sausage-grits",name:"Sausage & Grits Bowl",price:"7.49",description:"Grits, Sausage, Cheese, Eggs"},{id:"flaky-boom",name:"The Flaky Boom",price:"6.49",description:"Croissant, Eggs, Cheese, Bacon or Sausage"},{id:"breakfast-biscuit",name:"The Breakfast Biscuit",price:"6.49",description:"Biscuit, Eggs, Cheese, Bacon or Sausage"},{id:"kids-breakfast",name:"Kids Breakfast",price:"5.99",description:"Eggs, Biscuit, Bacon or Sausage"},{id:"scones",name:"Chocolate or Blueberry Scones",price:"3.79",subCategory:"Bakery"},{id:"muffins",name:"Banana Nut Muffins",price:"3.99",subCategory:"Bakery"}]};
+
+  function buildCol(section) {
+    let html = `<div class="sec-title">${section.title}</div>
+      ${section.note ? `<span class="sec-note">${section.note}</span>` : ''}
+      <div class="sec-rule"></div>`;
+    let lastSub = null;
+    section.items.forEach(item => {
+      if (item.subCategory && item.subCategory !== lastSub) {
+        lastSub = item.subCategory;
+        html += `<div class="sub-label">${item.subCategory}</div>`;
+      }
+      const cls = ['item', item.special && 'special'].filter(Boolean).join(' ');
+      if (item.sizes) {
+        html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.note?`<span class="item-mod">${item.note}</span>`:''}</div><div class="item-sizes">${item.sizes.map(s=>`${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ')}</div></div>`;
+      } else {
+        html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.badge?`<span class="badge">${item.badge}</span>`:''}<span style="flex:1"></span>${item.price?`<span class="item-price">$${item.price}</span>`:''}</div>${item.description?`<div class="item-desc">${item.description}</div>`:''}${item.note&&!item.sizes?`<div class="item-note">${item.note}</div>`:''}</div>`;
+      }
+    });
+    return html;
+  }
+
+  [COFFEE, BREAKFAST].forEach(section => {
+    const col = document.createElement('div');
+    col.className = 'col';
+    col.innerHTML = buildCol(section);
+    document.getElementById('columns').appendChild(col);
+  });
+</script>
+</body>
+</html>

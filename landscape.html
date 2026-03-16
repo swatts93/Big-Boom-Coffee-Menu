@@ -65,15 +65,6 @@
       flex: 1;
     }
 
-    .header-clock {
-      font-family: 'Oswald', sans-serif;
-      font-size: 40px;
-      font-weight: 700;
-      color: var(--cream);
-      flex-shrink: 0;
-      min-width: 148px;
-      text-align: right;
-    }
 
     /* ── Columns ──────────────────────────────────────────── */
     #columns {
@@ -88,22 +79,18 @@
     #columns::before {
       content: '';
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 640px;
-      height: 640px;
+      inset: 0;
       background-image: url('Logo.jpeg');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      opacity: 0.06;
+      opacity: 0.07;
       pointer-events: none;
       z-index: 0;
     }
 
     .col {
-      padding: 26px 38px 20px;
+      padding: 18px 32px 14px;
       border-right: 2px solid var(--divider);
       overflow: hidden;
       position: relative;
@@ -136,7 +123,7 @@
     .sec-rule {
       height: 2px;
       background: linear-gradient(to right, var(--orange), transparent);
-      margin: 10px 0 16px;
+      margin: 8px 0 10px;
     }
 
     /* ── Sub-category label ───────────────────────────────── */
@@ -147,14 +134,14 @@
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--sage-lt);
-      padding-bottom: 5px;
+      padding-bottom: 4px;
       border-bottom: 1px dashed var(--divider);
-      margin: 12px 0 8px;
+      margin: 8px 0 6px;
     }
 
     /* ── Menu item ────────────────────────────────────────── */
     .item {
-      margin-bottom: 11px;
+      margin-bottom: 7px;
     }
 
     .item-top {
@@ -250,7 +237,6 @@
       <div class="header-title">Big <span>Boom</span> Coffee Company</div>
     </div>
     <div class="header-hours">Open 5:00am – 2:00pm &nbsp;·&nbsp; Lunch served from 10:30am</div>
-    <div class="header-clock" id="clock">–</div>
   </header>
 
   <div id="columns"></div>
@@ -260,17 +246,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script>
-    // ── Clock ─────────────────────────────────────────────
-    function tick() {
-      const d = new Date();
-      const h = d.getHours() % 12 || 12;
-      const m = String(d.getMinutes()).padStart(2, '0');
-      document.getElementById('clock').textContent =
-        `${h}:${m} ${d.getHours() >= 12 ? 'PM' : 'AM'}`;
-    }
-    tick();
-    setInterval(tick, 1000);
-
     // ── Render helpers ────────────────────────────────────
     function sizesHTML(sizes) {
       return sizes.map(s => `${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ');
