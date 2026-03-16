@@ -8,6 +8,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
+    /* ── Sunlight theme: warm cream background, high-contrast dark text ── *
+     * Light backgrounds outperform dark in direct sun — ambient light adds  *
+     * to bright areas rather than washing out light-on-dark text.           */
     body {
       width: 1080px;
       height: 1920px;
@@ -15,6 +18,20 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      background: #fdf5e4;   /* override the dark --bg from style.css */
+    }
+
+    /* Re-scope color tokens inside the content area only so the dark
+       header gradient and white header text remain untouched.          */
+    #columns {
+      --cream:      #1a0800;   /* primary text  → near-black espresso  */
+      --cream-dim:  #5c3010;   /* secondary     → dark warm brown      */
+      --text-muted: #5c3010;
+      --muted:      #5c3010;
+      --orange:     #bf5200;   /* accent        → deep burnt orange    */
+      --orange-lt:  #d46010;
+      --sage-lt:    #3d5c18;   /* sub-labels    → dark forest sage     */
+      --divider:    rgba(140, 70, 0, 0.25);
     }
 
     /* ── Header ───────────────────────────────────────────── */
@@ -84,7 +101,8 @@
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      opacity: 0.07;
+      opacity: 0.10;
+      mix-blend-mode: multiply;   /* darkens logo onto cream bg correctly */
       pointer-events: none;
       z-index: 0;
     }
@@ -98,7 +116,7 @@
     }
 
     .col:last-child { border-right: none; }
-    .col:nth-child(2) { background: rgba(255,255,255,0.012); }
+    .col:nth-child(2) { background: rgba(0,0,0,0.025); }
 
     /* ── Section header ───────────────────────────────────── */
     .sec-title {
@@ -212,22 +230,23 @@
     /* ── LIT TEA special card ─────────────────────────────── */
     .item.special {
       background: linear-gradient(135deg,
-        rgba(212,113,42,0.14) 0%,
-        rgba(138,149,96,0.09) 100%);
-      border: 1px solid rgba(212,113,42,0.42);
+        rgba(190,80,0,0.10) 0%,
+        rgba(80,110,30,0.06) 100%);
+      border: 1px solid rgba(180,75,0,0.45);
       border-radius: 8px;
       padding: 13px 16px;
       margin-bottom: 0;
     }
 
     .item.special .item-name {
-      color: var(--orange-lt);
+      color: var(--orange);
       font-size: 32px;
     }
 
     .item.special .item-desc {
       font-style: normal;
       font-size: 18px;
+      color: var(--cream-dim);
       margin-top: 6px;
     }
 
@@ -237,6 +256,39 @@
       letter-spacing: 0.8px;
       color: var(--sage-lt);
       margin-top: 5px;
+    }
+
+    /* ── LIT TEA levels ──────────────────────────────────── */
+    .lit-levels {
+      display: flex;
+      gap: 6px;
+      margin-top: 7px;
+      flex-wrap: wrap;
+    }
+    .lit-level {
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: rgba(224,120,40,0.20);
+      border: 1px solid rgba(224,120,40,0.50);
+      color: var(--orange-lt);
+      padding: 3px 9px;
+      border-radius: 3px;
+    }
+
+    /* ── Sub-category note (own line below label) ───────── */
+    .sub-note {
+      display: block;
+      font-family: 'Lato', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--cream-dim);
+      text-transform: none;
+      letter-spacing: 0;
+      margin-top: 3px;
     }
   </style>
 </head>
@@ -299,7 +351,8 @@
             ${item.price ? `<span class="item-price">$${item.price}</span>` : ''}
           </div>
           ${item.description ? `<div class="item-desc">${item.description}</div>` : ''}
-          ${item.note && !item.sizes ? `<div class="item-note">${item.note}</div>` : ''}
+          ${item.levels && item.levels.length ? `<div class="lit-levels">${item.levels.map(l => `<span class="lit-level">${l}</span>`).join('')}</div>` : ''}
+          ${item.note && !item.sizes && !item.levels ? `<div class="item-note">${item.note}</div>` : ''}
         </div>`;
     }
 
@@ -314,7 +367,9 @@
       visibleItems.forEach(item => {
         if (item.subCategory && item.subCategory !== lastSub) {
           lastSub = item.subCategory;
-          html += `<div class="sub-label">${item.subCategory}</div>`;
+          const noteSpan = item.subCategoryNote
+            ? `<span class="sub-note">${item.subCategoryNote}</span>` : '';
+          html += `<div class="sub-label">${item.subCategory}${noteSpan}</div>`;
         }
         html += itemHTML(item);
       });

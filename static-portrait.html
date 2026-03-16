@@ -201,6 +201,22 @@
       margin-left: 6px;
     }
     .sold-out { opacity: 0.38; }
+    /* ── LIT TEA levels ──────────────────────────────────── */
+    .lit-levels { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+    .lit-level {
+      font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      background: rgba(224,120,40,0.20); border: 1px solid rgba(224,120,40,0.50);
+      color: #f0983c; padding: 3px 9px; border-radius: 3px;
+    }
+    /* ── Sub-category note ───────────────────────────────── */
+    .sub-note {
+      display: block;
+      font-family: 'Lato', sans-serif;
+      font-size: 16px; font-weight: 400; font-style: italic;
+      color: var(--muted); text-transform: none;
+      letter-spacing: 0; margin-top: 3px;
+    }
   </style>
 </head>
 <body>
@@ -216,8 +232,31 @@
 <div id="columns"></div>
 
 <script>
-  const COFFEE = {id:"coffee",title:"Coffee & Drinks",note:null,items:[{id:"drip-coffee",name:"Drip Coffee",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"2.99"},{label:"20oz",price:"3.49"},{label:"24oz",price:"3.99"}]},{id:"americano",name:"Americano",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"3.99"}]},{id:"espresso",name:"Espresso",sizes:[{label:"Single",price:"2.99"},{label:"Double",price:"4.99"}]},{id:"latte",name:"Latte",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},{id:"mocha",name:"Mocha",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},{id:"cappuccino",name:"Cappuccino",sizes:[{label:"12oz",price:"4.49"}]},{id:"mocha-frappe",name:"Mocha Frappe",sizes:[{label:"16oz",price:"5.75"},{label:"20oz",price:"6.75"}]},{id:"tea",name:"Tea",sizes:[{label:"16oz",price:"2.49"},{label:"20oz",price:"2.79"},{label:"32oz",price:"3.49"}]},{id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"Cherry Boom · Firecracker Punch · Blue Bomb · Fourth of July",note:"Levels: No Lit · Not So Lit · Lit · Boosted",special:true}]};
-  const BREAKFAST = {id:"breakfast",title:"Breakfast",note:"Served 5:00am – 10:30am",items:[{id:"breakfast-burrito",name:"Breakfast Burrito",price:"6.49",description:"Eggs, Cheese, Bacon or Sausage"},{id:"big-boom-burrito",name:"Big Boom Burrito",price:"6.99",description:"Eggs, Sausage, Bacon, Cheese, Gravy, Potatoes"},{id:"breakfast-bowl",name:"Breakfast Bowl",price:"6.99",description:"Eggs, Cheese, Bacon or Sausage"},{id:"big-breakfast-bowl",name:"Big Breakfast Bowl",price:"7.99",description:"Eggs, Sausage, Bacon, Cheese, Gravy, Potatoes"},{id:"biscuits-gravy",name:"Biscuits & Gravy Bowl",price:"7.49",description:"Biscuit, Eggs, Gravy, Cheese"},{id:"bacon-grits",name:"Bacon & Grits Bowl",price:"7.49",description:"Grits, Bacon, Cheese, Eggs"},{id:"sausage-grits",name:"Sausage & Grits Bowl",price:"7.49",description:"Grits, Sausage, Cheese, Eggs"},{id:"flaky-boom",name:"The Flaky Boom",price:"6.49",description:"Croissant, Eggs, Cheese, Bacon or Sausage"},{id:"breakfast-biscuit",name:"The Breakfast Biscuit",price:"6.49",description:"Biscuit, Eggs, Cheese, Bacon or Sausage"},{id:"kids-breakfast",name:"Kids Breakfast",price:"5.99",description:"Eggs, Biscuit, Bacon or Sausage"},{id:"scones",name:"Chocolate or Blueberry Scones",price:"3.79",subCategory:"Bakery"},{id:"muffins",name:"Banana Nut Muffins",price:"3.99",subCategory:"Bakery"}]};
+  const COFFEE = {id:"coffee",title:"Coffee & Drinks",note:null,items:[
+    {id:"drip-coffee",name:"Drip Coffee",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"2.99"},{label:"20oz",price:"3.49"},{label:"24oz",price:"3.99"}]},
+    {id:"latte",name:"Latte",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},
+    {id:"mocha",name:"Mocha",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},
+    {id:"americano",name:"Americano",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"3.99"}]},
+    {id:"cappuccino",name:"Cappuccino",sizes:[{label:"12oz",price:"4.49"}]},
+    {id:"mocha-frappe",name:"Mocha Frappe",sizes:[{label:"16oz",price:"5.75"},{label:"20oz",price:"6.75"}]},
+    {id:"espresso",name:"Espresso",sizes:[{label:"Single",price:"2.99"},{label:"Double",price:"4.99"}]},
+    {id:"tea",name:"Tea",sizes:[{label:"16oz",price:"2.49"},{label:"20oz",price:"2.79"},{label:"32oz",price:"3.49"}]},
+    {id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"Cherry Boom (Cherry/Lemonade) \u00b7 Firecracker Punch (Fruit Punch) \u00b7 Blue Bomb (Blue Raspberry) \u00b7 Fourth of July (Blue Raspberry/Cherry)",levels:["No Lit","Not So Lit","Lit","Boosted"],special:true}
+  ]};
+  const BREAKFAST = {id:"breakfast",title:"Breakfast",note:"Served 5:00am \u2013 10:30am",items:[
+    {id:"breakfast-burrito",name:"Breakfast Burrito",price:"6.49",description:"Bacon or Sausage",subCategory:"Burritos & Sandwiches",subCategoryNote:"All include Eggs & Cheese"},
+    {id:"big-boom-burrito",name:"Big Boom Burrito",price:"6.99",description:"Sausage, Bacon, Gravy, Potatoes",subCategory:"Burritos & Sandwiches"},
+    {id:"flaky-boom",name:"The Flaky Boom",price:"6.49",description:"Croissant, Bacon or Sausage",subCategory:"Burritos & Sandwiches"},
+    {id:"breakfast-biscuit",name:"The Breakfast Biscuit",price:"6.49",description:"Biscuit, Bacon or Sausage",subCategory:"Burritos & Sandwiches"},
+    {id:"kids-breakfast",name:"Kids Breakfast",price:"5.99",description:"Biscuit, Bacon or Sausage",subCategory:"Burritos & Sandwiches"},
+    {id:"breakfast-bowl",name:"Breakfast Bowl",price:"6.99",description:"Bacon or Sausage",subCategory:"Bowls",subCategoryNote:"All include Eggs & Cheese"},
+    {id:"big-breakfast-bowl",name:"Big Breakfast Bowl",price:"7.99",description:"Sausage, Bacon, Gravy, Potatoes",subCategory:"Bowls"},
+    {id:"biscuits-gravy",name:"Biscuits & Gravy Bowl",price:"7.49",description:"Biscuit, Gravy",subCategory:"Bowls"},
+    {id:"bacon-grits",name:"Bacon & Grits Bowl",price:"7.49",description:"Grits, Bacon",subCategory:"Bowls"},
+    {id:"sausage-grits",name:"Sausage & Grits Bowl",price:"7.49",description:"Grits, Sausage",subCategory:"Bowls"},
+    {id:"scones",name:"Chocolate or Blueberry Scones",price:"3.79",subCategory:"Bakery"},
+    {id:"muffins",name:"Banana Nut Muffins",price:"3.99",subCategory:"Bakery"}
+  ]};
 
   function buildCol(section) {
     let html = `<div class="sec-title">${section.title}</div>
@@ -227,13 +266,14 @@
     section.items.forEach(item => {
       if (item.subCategory && item.subCategory !== lastSub) {
         lastSub = item.subCategory;
-        html += `<div class="sub-label">${item.subCategory}</div>`;
+        const n = item.subCategoryNote ? `<span class="sub-note">${item.subCategoryNote}</span>` : '';
+        html += `<div class="sub-label">${item.subCategory}${n}</div>`;
       }
       const cls = ['item', item.special && 'special'].filter(Boolean).join(' ');
       if (item.sizes) {
         html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.note?`<span class="item-mod">${item.note}</span>`:''}</div><div class="item-sizes">${item.sizes.map(s=>`${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ')}</div></div>`;
       } else {
-        html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.badge?`<span class="badge">${item.badge}</span>`:''}<span style="flex:1"></span>${item.price?`<span class="item-price">$${item.price}</span>`:''}</div>${item.description?`<div class="item-desc">${item.description}</div>`:''}${item.note&&!item.sizes?`<div class="item-note">${item.note}</div>`:''}</div>`;
+        html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.badge?`<span class="badge">${item.badge}</span>`:''}<span style="flex:1"></span>${item.price?`<span class="item-price">$${item.price}</span>`:''}</div>${item.description?`<div class="item-desc">${item.description}</div>`:''}${item.levels&&item.levels.length?`<div class="lit-levels">${item.levels.map(l=>`<span class="lit-level">${l}</span>`).join('')}</div>`:''}${item.note&&!item.sizes&&!item.levels?`<div class="item-note">${item.note}</div>`:''}</div>`;
       }
     });
     return html;

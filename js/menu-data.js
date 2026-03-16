@@ -8,6 +8,7 @@ const DEFAULT_MENU = {
       title: "Coffee & Drinks",
       note: null,
       items: [
+        // ── oz-grid items (rendered as aligned table in landscape) ──
         {
           id: "drip-coffee",
           name: "Drip Coffee",
@@ -16,22 +17,6 @@ const DEFAULT_MENU = {
             { label: "16oz", price: "2.99" },
             { label: "20oz", price: "3.49" },
             { label: "24oz", price: "3.99" }
-          ]
-        },
-        {
-          id: "americano",
-          name: "Americano",
-          sizes: [
-            { label: "12oz", price: "3.49" },
-            { label: "16oz", price: "3.99" }
-          ]
-        },
-        {
-          id: "espresso",
-          name: "Espresso",
-          sizes: [
-            { label: "Single", price: "2.99" },
-            { label: "Double", price: "4.99" }
           ]
         },
         {
@@ -57,6 +42,14 @@ const DEFAULT_MENU = {
           ]
         },
         {
+          id: "americano",
+          name: "Americano",
+          sizes: [
+            { label: "12oz", price: "3.49" },
+            { label: "16oz", price: "3.99" }
+          ]
+        },
+        {
           id: "cappuccino",
           name: "Cappuccino",
           sizes: [
@@ -69,6 +62,15 @@ const DEFAULT_MENU = {
           sizes: [
             { label: "16oz", price: "5.75" },
             { label: "20oz", price: "6.75" }
+          ]
+        },
+        // ── non-grid items ──
+        {
+          id: "espresso",
+          name: "Espresso",
+          sizes: [
+            { label: "Single", price: "2.99" },
+            { label: "Double", price: "4.99" }
           ]
         },
         {
@@ -84,8 +86,8 @@ const DEFAULT_MENU = {
           id: "lit-tea",
           name: "LIT TEA!!!",
           price: "7.99",
-          description: "Cherry Boom \u00b7 Firecracker Punch \u00b7 Blue Bomb \u00b7 Fourth of July",
-          note: "Levels: No Lit \u00b7 Not So Lit \u00b7 Lit \u00b7 Boosted",
+          description: "Cherry Boom (Cherry/Lemonade) \u00b7 Firecracker Punch (Fruit Punch) \u00b7 Blue Bomb (Blue Raspberry) \u00b7 Fourth of July (Blue Raspberry/Cherry)",
+          levels: ["No Lit", "Not So Lit", "Lit", "Boosted"],
           special: true
         }
       ]
@@ -95,66 +97,81 @@ const DEFAULT_MENU = {
       title: "Breakfast",
       note: "Served 5:00am \u2013 10:30am",
       items: [
+        // ── Burritos & Sandwiches ──
         {
           id: "breakfast-burrito",
           name: "Breakfast Burrito",
           price: "6.49",
-          description: "Eggs, Cheese, Bacon or Sausage"
+          description: "Bacon or Sausage",
+          subCategory: "Burritos & Sandwiches",
+          subCategoryNote: "All include Eggs & Cheese"
         },
         {
           id: "big-boom-burrito",
           name: "Big Boom Burrito",
           price: "6.99",
-          description: "Eggs, Sausage, Bacon, Cheese, Gravy, Potatoes"
-        },
-        {
-          id: "breakfast-bowl",
-          name: "Breakfast Bowl",
-          price: "6.99",
-          description: "Eggs, Cheese, Bacon or Sausage"
-        },
-        {
-          id: "big-breakfast-bowl",
-          name: "Big Breakfast Bowl",
-          price: "7.99",
-          description: "Eggs, Sausage, Bacon, Cheese, Gravy, Potatoes"
-        },
-        {
-          id: "biscuits-gravy",
-          name: "Biscuits & Gravy Bowl",
-          price: "7.49",
-          description: "Biscuit, Eggs, Gravy, Cheese"
-        },
-        {
-          id: "bacon-grits",
-          name: "Bacon & Grits Bowl",
-          price: "7.49",
-          description: "Grits, Bacon, Cheese, Eggs"
-        },
-        {
-          id: "sausage-grits",
-          name: "Sausage & Grits Bowl",
-          price: "7.49",
-          description: "Grits, Sausage, Cheese, Eggs"
+          description: "Sausage, Bacon, Gravy, Potatoes",
+          subCategory: "Burritos & Sandwiches"
         },
         {
           id: "flaky-boom",
           name: "The Flaky Boom",
           price: "6.49",
-          description: "Croissant, Eggs, Cheese, Bacon or Sausage"
+          description: "Croissant, Bacon or Sausage",
+          subCategory: "Burritos & Sandwiches"
         },
         {
           id: "breakfast-biscuit",
           name: "The Breakfast Biscuit",
           price: "6.49",
-          description: "Biscuit, Eggs, Cheese, Bacon or Sausage"
+          description: "Biscuit, Bacon or Sausage",
+          subCategory: "Burritos & Sandwiches"
         },
         {
           id: "kids-breakfast",
           name: "Kids Breakfast",
           price: "5.99",
-          description: "Eggs, Biscuit, Bacon or Sausage"
+          description: "Biscuit, Bacon or Sausage",
+          subCategory: "Burritos & Sandwiches"
         },
+        // ── Bowls ──
+        {
+          id: "breakfast-bowl",
+          name: "Breakfast Bowl",
+          price: "6.99",
+          description: "Bacon or Sausage",
+          subCategory: "Bowls",
+          subCategoryNote: "All include Eggs & Cheese"
+        },
+        {
+          id: "big-breakfast-bowl",
+          name: "Big Breakfast Bowl",
+          price: "7.99",
+          description: "Sausage, Bacon, Gravy, Potatoes",
+          subCategory: "Bowls"
+        },
+        {
+          id: "biscuits-gravy",
+          name: "Biscuits & Gravy Bowl",
+          price: "7.49",
+          description: "Biscuit, Gravy",
+          subCategory: "Bowls"
+        },
+        {
+          id: "bacon-grits",
+          name: "Bacon & Grits Bowl",
+          price: "7.49",
+          description: "Grits, Bacon",
+          subCategory: "Bowls"
+        },
+        {
+          id: "sausage-grits",
+          name: "Sausage & Grits Bowl",
+          price: "7.49",
+          description: "Grits, Sausage",
+          subCategory: "Bowls"
+        },
+        // ── Bakery ──
         {
           id: "scones",
           name: "Chocolate or Blueberry Scones",
@@ -245,7 +262,8 @@ function normalizeMenu(data) {
       ...s,
       items: toArray(s.items).map(item => ({
         ...item,
-        sizes: item.sizes ? toArray(item.sizes) : undefined
+        sizes:  item.sizes  ? toArray(item.sizes)  : undefined,
+        levels: item.levels ? toArray(item.levels) : undefined
       }))
     }))
   };

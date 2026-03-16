@@ -211,6 +211,40 @@
       margin-left: 6px;
     }
     .sold-out { opacity: 0.38; }
+
+    /* ── Coffee oz-grid ──────────────────────────────────── */
+    .cg-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+    .cg-sz-hdr {
+      font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 500;
+      color: var(--sage-lt); text-align: right; width: 63px;
+      padding-bottom: 3px; letter-spacing: 0.5px;
+    }
+    .cg-name-cell { padding: 4px 0; }
+    .cg-name {
+      font-family: 'Lato', sans-serif; font-size: 30px; font-weight: 700;
+      color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+    }
+    .cg-imod { font-family: 'Lato', sans-serif; font-size: 13px; color: var(--sage-lt); font-style: italic; }
+    .cg-price {
+      font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700;
+      color: var(--orange); text-align: right; vertical-align: middle; padding-left: 4px;
+    }
+    /* ── LIT TEA levels ──────────────────────────────────── */
+    .lit-levels { display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap; }
+    .lit-level {
+      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      background: rgba(224,120,40,0.20); border: 1px solid rgba(224,120,40,0.50);
+      color: var(--orange-lt); padding: 3px 8px; border-radius: 3px;
+    }
+    /* ── Sub-category note ───────────────────────────────── */
+    .sub-note {
+      display: block;
+      font-family: 'Lato', sans-serif;
+      font-size: 15px; font-weight: 400; font-style: italic;
+      color: var(--muted); text-transform: none;
+      letter-spacing: 0; margin-top: 2px;
+    }
   </style>
 </head>
 <body>
@@ -226,30 +260,86 @@
 <div id="columns"></div>
 
 <script>
-  // Menu data
-  const MENU = {sections:[{id:"coffee",title:"Coffee & Drinks",note:null,items:[{id:"drip-coffee",name:"Drip Coffee",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"2.99"},{label:"20oz",price:"3.49"},{label:"24oz",price:"3.99"}]},{id:"americano",name:"Americano",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"3.99"}]},{id:"espresso",name:"Espresso",sizes:[{label:"Single",price:"2.99"},{label:"Double",price:"4.99"}]},{id:"latte",name:"Latte",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},{id:"mocha",name:"Mocha",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},{id:"cappuccino",name:"Cappuccino",sizes:[{label:"12oz",price:"4.49"}]},{id:"mocha-frappe",name:"Mocha Frappe",sizes:[{label:"16oz",price:"5.75"},{label:"20oz",price:"6.75"}]},{id:"tea",name:"Tea",sizes:[{label:"16oz",price:"2.49"},{label:"20oz",price:"2.79"},{label:"32oz",price:"3.49"}]},{id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"Cherry Boom · Firecracker Punch · Blue Bomb · Fourth of July",note:"Levels: No Lit · Not So Lit · Lit · Boosted",special:true}]},{id:"breakfast",title:"Breakfast",note:"Served 5:00am – 10:30am",items:[{id:"breakfast-burrito",name:"Breakfast Burrito",price:"6.49",description:"Eggs, Cheese, Bacon or Sausage"},{id:"big-boom-burrito",name:"Big Boom Burrito",price:"6.99",description:"Eggs, Sausage, Bacon, Cheese, Gravy, Potatoes"},{id:"breakfast-bowl",name:"Breakfast Bowl",price:"6.99",description:"Eggs, Cheese, Bacon or Sausage"},{id:"big-breakfast-bowl",name:"Big Breakfast Bowl",price:"7.99",description:"Eggs, Sausage, Bacon, Cheese, Gravy, Potatoes"},{id:"biscuits-gravy",name:"Biscuits & Gravy Bowl",price:"7.49",description:"Biscuit, Eggs, Gravy, Cheese"},{id:"bacon-grits",name:"Bacon & Grits Bowl",price:"7.49",description:"Grits, Bacon, Cheese, Eggs"},{id:"sausage-grits",name:"Sausage & Grits Bowl",price:"7.49",description:"Grits, Sausage, Cheese, Eggs"},{id:"flaky-boom",name:"The Flaky Boom",price:"6.49",description:"Croissant, Eggs, Cheese, Bacon or Sausage"},{id:"breakfast-biscuit",name:"The Breakfast Biscuit",price:"6.49",description:"Biscuit, Eggs, Cheese, Bacon or Sausage"},{id:"kids-breakfast",name:"Kids Breakfast",price:"5.99",description:"Eggs, Biscuit, Bacon or Sausage"},{id:"scones",name:"Chocolate or Blueberry Scones",price:"3.79",subCategory:"Bakery"},{id:"muffins",name:"Banana Nut Muffins",price:"3.99",subCategory:"Bakery"}]},{id:"lunch",title:"Lunch",note:"Served from 10:30am",items:[{id:"paninis",name:"Paninis",price:"9.49",description:"Turkey, Ham or Roast Beef · Cheese & Boom Sauce"},{id:"garden-salad",name:"Garden Salad",price:"7.99",description:"Spring Mix, Cheese, Tomatoes"},{id:"blt",name:"BLT",price:"8.99",description:"Spring Mix, Bacon, Lettuce, Tomato"},{id:"club-salad",name:"Club Salad",price:"10.49",description:"Ham, Bacon, Lettuce, Tomato"},{id:"chicken-salad",name:"Chicken Salad",price:"10.49",description:"Chicken, Bacon, Lettuce, Tomato"},{id:"lunch-combo",name:"Lunch Combo",price:"13.49",description:"Choice of Sandwich, Chips & Drink"},{id:"kids-lunch",name:"Kids Lunch",price:"5.99",description:"Grilled Cheese, Chips & Drink"},{id:"soup",name:"Soup of the Day",price:null,badge:"Coming Soon!"}]}]};
+  const MENU = {sections:[
+    {id:"coffee",title:"Coffee & Drinks",note:null,items:[
+      {id:"drip-coffee",name:"Drip Coffee",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"2.99"},{label:"20oz",price:"3.49"},{label:"24oz",price:"3.99"}]},
+      {id:"latte",name:"Latte",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},
+      {id:"mocha",name:"Mocha",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},
+      {id:"americano",name:"Americano",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"3.99"}]},
+      {id:"cappuccino",name:"Cappuccino",sizes:[{label:"12oz",price:"4.49"}]},
+      {id:"mocha-frappe",name:"Mocha Frappe",sizes:[{label:"16oz",price:"5.75"},{label:"20oz",price:"6.75"}]},
+      {id:"espresso",name:"Espresso",sizes:[{label:"Single",price:"2.99"},{label:"Double",price:"4.99"}]},
+      {id:"tea",name:"Tea",sizes:[{label:"16oz",price:"2.49"},{label:"20oz",price:"2.79"},{label:"32oz",price:"3.49"}]},
+      {id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"Cherry Boom (Cherry/Lemonade) \u00b7 Firecracker Punch (Fruit Punch) \u00b7 Blue Bomb (Blue Raspberry) \u00b7 Fourth of July (Blue Raspberry/Cherry)",levels:["No Lit","Not So Lit","Lit","Boosted"],special:true}
+    ]},
+    {id:"breakfast",title:"Breakfast",note:"Served 5:00am \u2013 10:30am",items:[
+      {id:"breakfast-burrito",name:"Breakfast Burrito",price:"6.49",description:"Bacon or Sausage",subCategory:"Burritos & Sandwiches",subCategoryNote:"All include Eggs & Cheese"},
+      {id:"big-boom-burrito",name:"Big Boom Burrito",price:"6.99",description:"Sausage, Bacon, Gravy, Potatoes",subCategory:"Burritos & Sandwiches"},
+      {id:"flaky-boom",name:"The Flaky Boom",price:"6.49",description:"Croissant, Bacon or Sausage",subCategory:"Burritos & Sandwiches"},
+      {id:"breakfast-biscuit",name:"The Breakfast Biscuit",price:"6.49",description:"Biscuit, Bacon or Sausage",subCategory:"Burritos & Sandwiches"},
+      {id:"kids-breakfast",name:"Kids Breakfast",price:"5.99",description:"Biscuit, Bacon or Sausage",subCategory:"Burritos & Sandwiches"},
+      {id:"breakfast-bowl",name:"Breakfast Bowl",price:"6.99",description:"Bacon or Sausage",subCategory:"Bowls",subCategoryNote:"All include Eggs & Cheese"},
+      {id:"big-breakfast-bowl",name:"Big Breakfast Bowl",price:"7.99",description:"Sausage, Bacon, Gravy, Potatoes",subCategory:"Bowls"},
+      {id:"biscuits-gravy",name:"Biscuits & Gravy Bowl",price:"7.49",description:"Biscuit, Gravy",subCategory:"Bowls"},
+      {id:"bacon-grits",name:"Bacon & Grits Bowl",price:"7.49",description:"Grits, Bacon",subCategory:"Bowls"},
+      {id:"sausage-grits",name:"Sausage & Grits Bowl",price:"7.49",description:"Grits, Sausage",subCategory:"Bowls"},
+      {id:"scones",name:"Chocolate or Blueberry Scones",price:"3.79",subCategory:"Bakery"},
+      {id:"muffins",name:"Banana Nut Muffins",price:"3.99",subCategory:"Bakery"}
+    ]},
+    {id:"lunch",title:"Lunch",note:"Served from 10:30am",items:[
+      {id:"paninis",name:"Paninis",price:"9.49",description:"Turkey, Ham or Roast Beef \u00b7 Cheese & Boom Sauce"},
+      {id:"garden-salad",name:"Garden Salad",price:"7.99",description:"Spring Mix, Cheese, Tomatoes"},
+      {id:"blt",name:"BLT",price:"8.99",description:"Spring Mix, Bacon, Lettuce, Tomato"},
+      {id:"club-salad",name:"Club Salad",price:"10.49",description:"Ham, Bacon, Lettuce, Tomato"},
+      {id:"chicken-salad",name:"Chicken Salad",price:"10.49",description:"Chicken, Bacon, Lettuce, Tomato"},
+      {id:"lunch-combo",name:"Lunch Combo",price:"13.49",description:"Choice of Sandwich, Chips & Drink"},
+      {id:"kids-lunch",name:"Kids Lunch",price:"5.99",description:"Grilled Cheese, Chips & Drink"},
+      {id:"soup",name:"Soup of the Day",price:null,badge:"Coming Soon!"}
+    ]}
+  ]};
+
+  const OZ_COLS = ['12oz', '16oz', '20oz', '24oz'];
+  function isOzGridItem(item) {
+    return item.sizes && item.sizes.length > 0 && item.sizes.every(s => OZ_COLS.includes(s.label));
+  }
+
+  function itemHTML(item) {
+    const cls = ['item', item.special && 'special', item.soldOut && 'sold-out'].filter(Boolean).join(' ');
+    if (item.sizes && item.sizes.length) {
+      return `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.note?`<span class="item-mod">${item.note}</span>`:''}</div><div class="item-sizes">${item.sizes.map(s=>`${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ')}</div></div>`;
+    }
+    return `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.badge?`<span class="badge">${item.badge}</span>`:''}<span style="flex:1"></span>${item.price?`<span class="item-price">$${item.price}</span>`:''}</div>${item.description?`<div class="item-desc">${item.description}</div>`:''}${item.levels&&item.levels.length?`<div class="lit-levels">${item.levels.map(l=>`<span class="lit-level">${l}</span>`).join('')}</div>`:''}${item.note&&!item.sizes&&!item.levels?`<div class="item-note">${item.note}</div>`:''}</div>`;
+  }
 
   function render() {
     const container = document.getElementById('columns');
     MENU.sections.forEach(section => {
       const col = document.createElement('div');
       col.className = 'col';
-      let html = `<div class="sec-title">${section.title}</div>
-        ${section.note ? `<span class="sec-note">${section.note}</span>` : ''}
-        <div class="sec-rule"></div>`;
-      let lastSub = null;
-      section.items.forEach(item => {
-        if (item.subCategory && item.subCategory !== lastSub) {
-          lastSub = item.subCategory;
-          html += `<div class="sub-label">${item.subCategory}</div>`;
-        }
-        const cls = ['item', item.special && 'special', item.soldOut && 'sold-out'].filter(Boolean).join(' ');
-        if (item.sizes) {
-          html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.note?`<span class="item-mod">${item.note}</span>`:''}</div><div class="item-sizes">${item.sizes.map(s=>`${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ')}</div></div>`;
-        } else {
-          html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.badge?`<span class="badge">${item.badge}</span>`:''}<span style="flex:1"></span>${item.price?`<span class="item-price">$${item.price}</span>`:''}</div>${item.description?`<div class="item-desc">${item.description}</div>`:''}${item.note?`<div class="item-note">${item.note}</div>`:''}</div>`;
-        }
-      });
+      let html = `<div class="sec-title">${section.title}</div>${section.note?`<span class="sec-note">${section.note}</span>`:''}<div class="sec-rule"></div>`;
+
+      if (section.id === 'coffee') {
+        const gridItems  = section.items.filter(isOzGridItem);
+        const otherItems = section.items.filter(i => !isOzGridItem(i));
+        const usedCols = OZ_COLS.filter(col => gridItems.some(item => item.sizes.find(s => s.label === col)));
+        html += `<table class="cg-table"><thead><tr><th></th>${usedCols.map(c=>`<th class="cg-sz-hdr">${c}</th>`).join('')}</tr></thead><tbody>`;
+        gridItems.forEach(item => {
+          html += `<tr${item.soldOut?' class="sold-out"':''}><td class="cg-name-cell"><span class="cg-name">${item.name}</span>${item.note?`<span class="cg-imod"> — ${item.note}</span>`:''}</td>${usedCols.map(c=>{const s=item.sizes.find(sz=>sz.label===c);return`<td class="cg-price">${s?`$${s.price}`:''}</td>`;}).join('')}</tr>`;
+        });
+        html += `</tbody></table>`;
+        otherItems.forEach(item => { html += itemHTML(item); });
+      } else {
+        let lastSub = null;
+        section.items.forEach(item => {
+          if (item.subCategory && item.subCategory !== lastSub) {
+            lastSub = item.subCategory;
+            const n = item.subCategoryNote ? `<span class="sub-note">${item.subCategoryNote}</span>` : '';
+            html += `<div class="sub-label">${item.subCategory}${n}</div>`;
+          }
+          html += itemHTML(item);
+        });
+      }
+
       col.innerHTML = html;
       container.appendChild(col);
     });
