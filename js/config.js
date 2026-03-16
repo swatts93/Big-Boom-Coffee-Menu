@@ -4,13 +4,13 @@
 // └──────────────────────────────────────────────────────────┘
 
 const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL:       "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  apiKey:            "AIzaSyCFRaxeSAOw9zefpS_QHCg4rVn2v1VIBtI",
+  authDomain:        "big-boom-menu.firebaseapp.com",
+  databaseURL:       "https://big-boom-menu-default-rtdb.firebaseio.com",
+  projectId:         "big-boom-menu",
+  storageBucket:     "big-boom-menu.firebasestorage.app",
+  messagingSenderId: "615378945426",
+  appId:             "1:615378945426:web:67b3aec3c261fdae36ad4b"
 };
 
 // Change this before deploying
