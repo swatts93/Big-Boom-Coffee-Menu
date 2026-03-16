@@ -176,6 +176,7 @@
       margin-top: 2px;
       line-height: 1.3;
     }
+    .item-desc b { font-style: normal; font-weight: 700; color: #1a0800; }
     .item.special {
       background: linear-gradient(135deg,
         rgba(190,80,0,0.08) 0%,
@@ -232,6 +233,7 @@
       color: var(--muted); text-transform: none;
       letter-spacing: 0; margin-top: 3px;
     }
+    .kids-drinks-sep { margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--divider); }
   </style>
 </head>
 <body>
@@ -248,7 +250,7 @@
 
 <script>
   const COFFEE = {id:"coffee",title:"Coffee & Drinks",note:null,items:[
-    {id:"drip-coffee",name:"Drip Coffee",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"2.99"},{label:"20oz",price:"3.49"},{label:"24oz",price:"3.99"}]},
+    {id:"drip-coffee",name:"Drip Coffee",sizes:[{label:"12oz",price:"2.49"},{label:"16oz",price:"2.99"},{label:"20oz",price:"3.49"},{label:"24oz",price:"3.99"}]},
     {id:"latte",name:"Latte",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},
     {id:"mocha",name:"Mocha",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},
     {id:"americano",name:"Americano",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"3.99"}]},
@@ -256,9 +258,8 @@
     {id:"mocha-frappe",name:"Mocha Frappe",sizes:[{label:"16oz",price:"5.75"},{label:"20oz",price:"6.75"}]},
     {id:"espresso",name:"Espresso",sizes:[{label:"Single",price:"2.99"},{label:"Double",price:"4.99"}]},
     {id:"tea",name:"Tea",sizes:[{label:"16oz",price:"2.49"},{label:"20oz",price:"2.79"},{label:"32oz",price:"3.49"}]},
-    {id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"Cherry Boom (Cherry/Lemonade) \u00b7 Firecracker Punch (Fruit Punch) \u00b7 Blue Bomb (Blue Raspberry) \u00b7 Fourth of July (Blue Raspberry/Cherry)",levels:["No Lit","Not So Lit","Lit","Boosted"],special:true},
-    {id:"scones",name:"Scones",price:"3.79",description:"Chocolate \u00b7 Blueberry \u00b7 Flavor of the Day",subCategory:"Bakery"},
-    {id:"muffins",name:"Banana Nut Muffins",price:"3.99",subCategory:"Bakery"}
+    {id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"<b>Cherry Boom</b> (Cherry/Lemonade) \u00b7 <b>Firecracker Punch</b> (Fruit Punch) \u00b7 <b>Blue Bomb</b> (Blue Raspberry) \u00b7 <b>Fourth of July</b> (Blue Raspberry/Cherry)",levels:["No Lit (0mg)","Not So Lit (35mg)","Lit (115mg)","Boosted (200mg)"],special:true},
+    {id:"kids-drinks",name:"Kids Drinks",price:"1.50",kidsSep:true,description:"Motts Apple Juice \u00b7 Motts Apple White Grape Juice \u00b7 Sunny D"}
   ]};
   const BREAKFAST = {id:"breakfast",title:"Breakfast",note:"Served 5:00am \u2013 10:30am",items:[
     {id:"breakfast-burrito",name:"Breakfast Burrito",price:"6.49",description:"Bacon or Sausage",subCategory:"Burritos & Sandwiches",subCategoryNote:"All include Eggs & Cheese"},
@@ -283,7 +284,8 @@
         const n = item.subCategoryNote ? `<span class="sub-note">${item.subCategoryNote}</span>` : '';
         html += `<div class="sub-label">${item.subCategory}${n}</div>`;
       }
-      const cls = ['item', item.special && 'special', item.soldOut && 'sold-out'].filter(Boolean).join(' ');
+      const extraCls = item.kidsSep ? ' kids-drinks-sep' : '';
+      const cls = ['item', item.special && 'special', item.soldOut && 'sold-out'].filter(Boolean).join(' ') + extraCls;
       if (item.sizes) {
         html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.note?`<span class="item-mod">${item.note}</span>`:''}</div><div class="item-sizes">${item.sizes.map(s=>`${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ')}</div></div>`;
       } else {

@@ -222,6 +222,8 @@
       color: var(--orange); padding: 3px 9px; border-radius: 3px;
     }
 
+    .item-desc b { font-style: normal; font-weight: 700; color: #1a0800; }
+
     /* ── Sub-category note ───────────────────────────────── */
     .sub-note {
       display: block;
@@ -230,6 +232,19 @@
       color: var(--muted); text-transform: none;
       letter-spacing: 0; margin-top: 3px;
     }
+
+    /* ── Bottled drink logo tiles ────────────────────────── */
+    .drinks-sep { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--divider); }
+    .kids-drinks-sep { margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--divider); }
+    .sec-divider { margin-top: 20px; }
+    .drink-logos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .drink-tile {
+      display: flex; align-items: center; justify-content: center;
+      width: 110px; height: 70px; border-radius: 8px; padding: 10px 8px; overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.10);
+    }
+    .drink-tile img { max-width: 100%; max-height: 48px; object-fit: contain; }
+    .drink-note { font-family: 'Lato', sans-serif; font-size: 14px; font-style: italic; color: var(--sage-lt); margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -246,7 +261,7 @@
 
 <script>
   const COFFEE = {id:"coffee",title:"Coffee & Drinks",note:null,items:[
-    {id:"drip-coffee",name:"Drip Coffee",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"2.99"},{label:"20oz",price:"3.49"},{label:"24oz",price:"3.99"}]},
+    {id:"drip-coffee",name:"Drip Coffee",sizes:[{label:"12oz",price:"2.49"},{label:"16oz",price:"2.99"},{label:"20oz",price:"3.49"},{label:"24oz",price:"3.99"}]},
     {id:"latte",name:"Latte",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},
     {id:"mocha",name:"Mocha",note:"Hot or Iced",sizes:[{label:"12oz",price:"4.49"},{label:"16oz",price:"4.99"},{label:"20oz",price:"5.49"},{label:"24oz",price:"5.99"}]},
     {id:"americano",name:"Americano",sizes:[{label:"12oz",price:"3.49"},{label:"16oz",price:"3.99"}]},
@@ -254,9 +269,17 @@
     {id:"mocha-frappe",name:"Mocha Frappe",sizes:[{label:"16oz",price:"5.75"},{label:"20oz",price:"6.75"}]},
     {id:"espresso",name:"Espresso",sizes:[{label:"Single",price:"2.99"},{label:"Double",price:"4.99"}]},
     {id:"tea",name:"Tea",sizes:[{label:"16oz",price:"2.49"},{label:"20oz",price:"2.79"},{label:"32oz",price:"3.49"}]},
-    {id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"Cherry Boom (Cherry/Lemonade) \u00b7 Firecracker Punch (Fruit Punch) \u00b7 Blue Bomb (Blue Raspberry) \u00b7 Fourth of July (Blue Raspberry/Cherry)",levels:["No Lit","Not So Lit","Lit","Boosted"],special:true},
-    {id:"scones",name:"Scones",price:"3.79",description:"Chocolate \u00b7 Blueberry \u00b7 Flavor of the Day",subCategory:"Bakery"},
-    {id:"muffins",name:"Banana Nut Muffins",price:"3.99",subCategory:"Bakery"}
+    {id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"<b>Cherry Boom</b> (Cherry/Lemonade) \u00b7 <b>Firecracker Punch</b> (Fruit Punch) \u00b7 <b>Blue Bomb</b> (Blue Raspberry) \u00b7 <b>Fourth of July</b> (Blue Raspberry/Cherry)",levels:["No Lit (0mg)","Not So Lit (35mg)","Lit (115mg)","Boosted (200mg)"],special:true},
+    {id:"bottled-drinks",name:"Bottled Drinks",price:"2.25",sectionGap:true,note:"Diet and Zero options available",logos:[
+      {name:"Pepsi",img:"logodrinks/extracted/pepsi-logo-svg-vector.svg",bg:"#ffffff"},
+      {name:"Coca-Cola",img:"logodrinks/extracted/coca-cola-logo-svg-vector.svg",bg:"#ffffff"},
+      {name:"Dr Pepper",img:"logodrinks/extracted/dr-pepper-logo/dr-pepper-logo.svg",bg:"#ffffff"},
+      {name:"Sunkist",img:"logodrinks/extracted/sunkist-2-logo-svg-vector.svg",bg:"#ffffff"},
+      {name:"A&W",img:"logodrinks/extracted/a-w-root-beer-logo-svg-vector.svg",bg:"#ffffff"},
+      {name:"Mtn Dew",img:"logodrinks/extracted/mountain-dew-6-logo-svg-vector.svg",bg:"#ffffff"},
+    ]},
+    {id:"water",name:"Water",price:"1.00",description:"Dasani"},
+    {id:"kids-drinks",name:"Kids Drinks",price:"1.50",kidsSep:true,description:"Motts Apple Juice \u00b7 Motts Apple White Grape Juice \u00b7 Sunny D"}
   ]};
   const LUNCH = {id:"lunch",title:"Lunch",note:"Served from 10:30am",items:[
     {id:"paninis",name:"Paninis",price:"9.49",description:"Turkey, Ham or Roast Beef \u00b7 Cheese & Boom Sauce"},
@@ -266,7 +289,12 @@
     {id:"chicken-salad",name:"Chicken Salad",price:"10.49",description:"Chicken, Bacon, Lettuce, Tomato"},
     {id:"lunch-combo",name:"Lunch Combo",price:"13.49",description:"Choice of Sandwich, Chips & Drink"},
     {id:"kids-lunch",name:"Kids Lunch",price:"5.99",description:"Grilled Cheese, Chips & Drink"},
-    {id:"soup",name:"Soup of the Day",price:null,badge:"Coming Soon!"}
+    {id:"kids-chicken-fingers",name:"Kids Chicken Fingers",price:"5.99",description:"4pc Chicken Fingers, Chips & Drink"},
+    {id:"soup",name:"Soup of the Day",price:null,badge:"Coming Soon!"},
+  ]};
+  const BAKERY = {id:"bakery",title:"Bakery",note:null,items:[
+    {id:"scones",name:"Scones",price:"3.79",description:"Chocolate · Blueberry · Flavor of the Day"},
+    {id:"muffins",name:"Banana Nut Muffins",price:"3.99"}
   ]};
 
   function buildCol(section) {
@@ -280,21 +308,26 @@
         const n = item.subCategoryNote ? `<span class="sub-note">${item.subCategoryNote}</span>` : '';
         html += `<div class="sub-label">${item.subCategory}${n}</div>`;
       }
-      const cls = ['item', item.special && 'special', item.soldOut && 'sold-out'].filter(Boolean).join(' ');
-      if (item.sizes) {
-        html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.note?`<span class="item-mod">${item.note}</span>`:''}</div><div class="item-sizes">${item.sizes.map(s=>`${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ')}</div></div>`;
+      if (item.logos) {
+        html += `<div class="item${item.sectionGap?' drinks-sep':''}"><div class="item-top"><span class="item-name">${item.name}</span><span style="flex:1"></span>${item.price?`<span class="item-price">$${item.price}</span>`:''}</div><div class="drink-logos">${item.logos.map(l=>`<div class="drink-tile" style="background:${l.bg}" title="${l.name}"><img src="${l.img}" alt="${l.name}"></div>`).join('')}</div>${item.note?`<div class="drink-note">${item.note}</div>`:''}</div>`;
       } else {
-        const desc = item.description ? (item.special ? item.description.split(' \u00b7 ').join('<br>') : item.description) : null;
-        html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.badge?`<span class="badge">${item.badge}</span>`:''}<span style="flex:1"></span>${item.price?`<span class="item-price">$${item.price}</span>`:''}</div>${desc?`<div class="item-desc">${desc}</div>`:''}${item.levels&&item.levels.length?`<div class="lit-levels">${item.levels.map(l=>`<span class="lit-level">${l}</span>`).join('')}</div>`:''}${item.note&&!item.sizes&&!item.levels?`<div class="item-note">${item.note}</div>`:''}</div>`;
+        const extraCls = item.kidsSep ? ' kids-drinks-sep' : '';
+        const cls = ['item', item.special && 'special', item.soldOut && 'sold-out'].filter(Boolean).join(' ') + extraCls;
+        if (item.sizes) {
+          html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.note?`<span class="item-mod">${item.note}</span>`:''}</div><div class="item-sizes">${item.sizes.map(s=>`${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ')}</div></div>`;
+        } else {
+          const desc = item.description ? (item.special ? item.description.split(' \u00b7 ').join('<br>') : item.description) : null;
+          html += `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.badge?`<span class="badge">${item.badge}</span>`:''}<span style="flex:1"></span>${item.price?`<span class="item-price">$${item.price}</span>`:''}</div>${desc?`<div class="item-desc">${desc}</div>`:''}${item.levels&&item.levels.length?`<div class="lit-levels">${item.levels.map(l=>`<span class="lit-level">${l}</span>`).join('')}</div>`:''}${item.note&&!item.sizes&&!item.levels?`<div class="item-note">${item.note}</div>`:''}</div>`;
+        }
       }
     });
     return html;
   }
 
-  [COFFEE, LUNCH].forEach(section => {
+  [[COFFEE], [LUNCH, BAKERY]].forEach(sections => {
     const col = document.createElement('div');
     col.className = 'col';
-    col.innerHTML = buildCol(section);
+    col.innerHTML = sections.map((s, i) => (i > 0 ? '<div class="sec-divider"></div>' : '') + buildCol(s)).join('');
     document.getElementById('columns').appendChild(col);
   });
 </script>

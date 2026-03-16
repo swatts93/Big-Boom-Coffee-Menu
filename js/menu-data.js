@@ -13,7 +13,7 @@ const DEFAULT_MENU = {
           id: "drip-coffee",
           name: "Drip Coffee",
           sizes: [
-            { label: "12oz", price: "3.49" },
+            { label: "12oz", price: "2.49" },
             { label: "16oz", price: "2.99" },
             { label: "20oz", price: "3.49" },
             { label: "24oz", price: "3.99" }
@@ -86,9 +86,27 @@ const DEFAULT_MENU = {
           id: "lit-tea",
           name: "LIT TEA!!!",
           price: "7.99",
-          description: "Cherry Boom (Cherry/Lemonade) \u00b7 Firecracker Punch (Fruit Punch) \u00b7 Blue Bomb (Blue Raspberry) \u00b7 Fourth of July (Blue Raspberry/Cherry)",
-          levels: ["No Lit", "Not So Lit", "Lit", "Boosted"],
+          description: "<b>Cherry Boom</b> (Cherry/Lemonade) \u00b7 <b>Firecracker Punch</b> (Fruit Punch) \u00b7 <b>Blue Bomb</b> (Blue Raspberry) \u00b7 <b>Fourth of July</b> (Blue Raspberry/Cherry)",
+          levels: ["No Lit (0mg)", "Not So Lit (35mg)", "Lit (115mg)", "Boosted (200mg)"],
           special: true
+        },
+        {
+          id: "bottled-drinks",
+          name: "Bottled Drinks",
+          price: "2.25",
+          description: "Pepsi · Pepsi Zero · Coke · Diet Coke · Dr. Pepper · Dr. Pepper Zero · Sunkist · A&W Root Beer Zero · Mountain Dew · Mountain Dew Zero"
+        },
+        {
+          id: "water",
+          name: "Water",
+          price: "1.00",
+          description: "Dasani"
+        },
+        {
+          id: "kids-drinks",
+          name: "Kids Drinks",
+          price: "1.50",
+          description: "Motts Apple Juice · Motts Apple White Grape Juice · Sunny D"
         }
       ]
     },
@@ -170,19 +188,6 @@ const DEFAULT_MENU = {
           price: "7.49",
           description: "Grits, Sausage",
           subCategory: "Bowls"
-        },
-        // ── Bakery ──
-        {
-          id: "scones",
-          name: "Chocolate or Blueberry Scones",
-          price: "3.79",
-          subCategory: "Bakery"
-        },
-        {
-          id: "muffins",
-          name: "Banana Nut Muffins",
-          price: "3.99",
-          subCategory: "Bakery"
         }
       ]
     },
@@ -234,10 +239,30 @@ const DEFAULT_MENU = {
           description: "Grilled Cheese, Chips & Drink"
         },
         {
+          id: "kids-chicken-fingers",
+          name: "Kids Chicken Fingers",
+          price: "5.99",
+          description: "4pc Chicken Fingers, Chips & Drink"
+        },
+        {
           id: "soup",
           name: "Soup of the Day",
           price: null,
           badge: "Coming Soon!"
+        },
+        // ── Bakery ──
+        {
+          id: "scones",
+          name: "Scones",
+          price: "3.79",
+          description: "Chocolate · Blueberry · Flavor of the Day",
+          subCategory: "Bakery"
+        },
+        {
+          id: "muffins",
+          name: "Banana Nut Muffins",
+          price: "3.99",
+          subCategory: "Bakery"
         }
       ]
     }
