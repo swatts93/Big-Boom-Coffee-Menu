@@ -7,16 +7,16 @@
 
 :root {
   /* ── Brand Colors ── */
-  --orange:      #d4712a;   /* sunburst / primary accent  */
-  --orange-lt:   #e8924a;   /* lighter orange             */
+  --orange:      #e07828;   /* sunburst / primary accent  */
+  --orange-lt:   #f0983c;   /* lighter orange             */
   --sage:        #8a9560;   /* logo background            */
-  --sage-lt:     #a8b07a;   /* lighter sage               */
+  --sage-lt:     #b8c88a;   /* lighter sage — boosted for sunlight */
   --rust:        #a84b28;   /* "Coffee Company" arc       */
-  --brown-dk:    #1a0e05;   /* near-black background      */
-  --brown-md:    #2e1a08;   /* card / surface             */
-  --brown-lg:    #3d2410;   /* raised surface             */
-  --cream:       #f2e4c6;   /* primary text               */
-  --cream-dim:   #c8a870;   /* secondary / muted text     */
+  --brown-dk:    #080401;   /* near-pure black — max contrast bg  */
+  --brown-md:    #1a1008;   /* card / surface             */
+  --brown-lg:    #2a1a0c;   /* raised surface             */
+  --cream:       #ffffff;   /* pure white — max sunlight readability */
+  --cream-dim:   #e0c898;   /* secondary / muted text     */
 
   /* ── Semantic ── */
   --bg:          var(--brown-dk);

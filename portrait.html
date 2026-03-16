@@ -80,16 +80,37 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Logo watermark ───────────────────────────────────── */
+    #columns::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background-image: url('Logo.jpeg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .col {
       padding: 28px 30px 20px;
       overflow: hidden;
       border-right: 2px solid var(--divider);
+      position: relative;
+      z-index: 1;
     }
 
     .col:last-child { border-right: none; }
-    .col:nth-child(2) { background: rgba(255,255,255,0.018); }
+    .col:nth-child(2) { background: rgba(255,255,255,0.012); }
 
     /* ── Section header ───────────────────────────────────── */
     .sec-title {
@@ -158,6 +179,7 @@
       color: var(--cream);
       flex: 1;
       line-height: 1.15;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.9);
     }
 
     .item-mod {
@@ -174,6 +196,7 @@
       font-weight: 700;
       color: var(--orange);
       flex-shrink: 0;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.9);
     }
 
     .item-sizes {
