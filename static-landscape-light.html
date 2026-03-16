@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <!--
-  STATIC MENU — no server or Firebase needed.
-  Open in Chrome → F11 for fullscreen on the TV.
-  To export as an image: Chrome menu → Print → Save as PDF,
-  then convert the PDF to PNG with any online tool.
+  STATIC LANDSCAPE MENU — Light Theme (outdoor/bright environment)
+  Open in Chrome → F11 for fullscreen on the landscape TV.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1920, initial-scale=1.0">
-  <title>Big Boom Coffee Company — Menu</title>
+  <title>Big Boom Coffee Company — Menu (Light)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
@@ -18,30 +16,26 @@
       --orange-lt: #f0983c;
       --sage:      #8a9560;
       --sage-lt:   #b8c88a;
-      --rust:      #a84b28;
-      --bg:        #080401;
       --surface:   #1a1008;
       --surface2:  #2a1a0c;
-      --divider:   rgba(224,120,40,0.30);
-      --text:      #ffffff;
-      --muted:     #e0c898;
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ── Bright outdoor theme ────────────────────────────── */
     body {
       width: 1920px;
       height: 1080px;
       overflow: hidden;
-      background: var(--bg);
-      color: var(--text);
+      background: #fdf5e4;
+      color: #1a0800;
       font-family: 'Lato', sans-serif;
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Header ─────────────────────────────────────────── */
+    /* ── Header — keep dark for brand identity ───────────── */
     #header {
       flex-shrink: 0;
       height: 96px;
@@ -50,22 +44,21 @@
       justify-content: space-between;
       padding: 0 44px;
       background: linear-gradient(180deg, var(--surface2) 0%, var(--surface) 100%);
-      border-bottom: 3px solid var(--orange);
+      border-bottom: 4px solid var(--orange);
       gap: 24px;
+      color: #fff;
     }
-
     .hdr-brand { display: flex; align-items: center; gap: 18px; }
-    .hdr-logo  { height: 74px; border-radius: 6px; }
-
+    .hdr-logo  { height: 74px; }
     .hdr-title {
       font-family: 'Playfair Display', serif;
       font-size: 40px;
       font-weight: 900;
       letter-spacing: 1.5px;
       text-transform: uppercase;
+      color: #fff;
     }
-    .hdr-title span { color: var(--orange); }
-
+    .hdr-title span { color: var(--orange-lt); }
     .hdr-hours {
       font-family: 'Oswald', sans-serif;
       font-size: 21px;
@@ -75,7 +68,6 @@
       text-align: center;
     }
 
-
     /* ── Columns ────────────────────────────────────────── */
     #columns {
       flex: 1;
@@ -83,21 +75,26 @@
       grid-template-columns: repeat(3, 1fr);
       overflow: hidden;
       position: relative;
+      /* Scoped tokens for dark-on-light content */
+      --orange:   #bf5200;
+      --orange-lt:#d46010;
+      --sage-lt:  #3d5c18;
+      --muted:    #5c3010;
+      --divider:  rgba(140, 70, 0, 0.28);
     }
-
     #columns::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: url('Logo.jpeg');
+      background-image: url('BBCCCream.svg');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      opacity: 0.07;
+      opacity: 0.12;
+      mix-blend-mode: multiply;
       pointer-events: none;
       z-index: 0;
     }
-
     .col {
       padding: 26px 38px 20px;
       border-right: 2px solid var(--divider);
@@ -106,7 +103,7 @@
       z-index: 1;
     }
     .col:last-child { border-right: none; }
-    .col:nth-child(2) { background: rgba(255,255,255,0.012); }
+    .col:nth-child(2) { background: rgba(0,0,0,0.025); }
 
     /* ── Section header ──────────────────────────────────── */
     .sec-title {
@@ -151,7 +148,7 @@
       font-weight: 700;
       flex: 1;
       line-height: 1.15;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+      color: #1a0800;
     }
     .item-mod {
       font-family: 'Lato', sans-serif;
@@ -164,7 +161,6 @@
       font-size: 24px;
       font-weight: 700;
       color: var(--orange);
-      text-shadow: 0 1px 6px rgba(0,0,0,0.9);
     }
     .item-sizes {
       font-family: 'Lato', sans-serif;
@@ -175,21 +171,29 @@
     .item-sizes b { color: var(--orange); font-weight: 700; }
     .item-desc {
       font-family: 'Lato', sans-serif;
-      font-size: 18px;
+      font-size: 17px;
       font-style: italic;
       color: var(--muted);
       margin-top: 2px;
       line-height: 1.3;
     }
     .item.special {
-      background: linear-gradient(135deg, rgba(224,120,40,0.14), rgba(138,149,96,0.09));
-      border: 1px solid rgba(224,120,40,0.42);
+      background: linear-gradient(135deg,
+        rgba(190,80,0,0.08) 0%,
+        rgba(80,110,30,0.05) 100%);
+      border: 1px solid rgba(180,75,0,0.45);
       border-radius: 8px;
       padding: 11px 14px;
       margin-bottom: 0;
     }
-    .item.special .item-name { color: var(--orange-lt); font-size: 28px; }
-    .item.special .item-desc { font-style: normal; font-size: 16px; margin-top: 5px; line-height: 1.9; }
+    .item.special .item-name { color: var(--orange); font-size: 28px; }
+    .item.special .item-desc {
+      font-style: normal;
+      font-size: 16px;
+      margin-top: 5px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
     .item-note {
       font-family: 'Oswald', sans-serif;
       font-size: 15px;
@@ -199,8 +203,8 @@
     }
     .badge {
       display: inline-block;
-      background: var(--sage);
-      color: var(--bg);
+      background: var(--sage-lt);
+      color: #fff;
       font-family: 'Oswald', sans-serif;
       font-size: 13px;
       font-weight: 700;
@@ -221,22 +225,24 @@
     }
     .cg-name-cell { padding: 6px 0; }
     .cg-name {
-      font-family: 'Lato', sans-serif; font-size: 27px; font-weight: 700;
-      color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+      font-family: 'Lato', sans-serif; font-size: 24px; font-weight: 700;
+      color: #1a0800;
     }
     .cg-imod { font-family: 'Lato', sans-serif; font-size: 13px; color: var(--sage-lt); font-style: italic; }
     .cg-price {
       font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700;
       color: var(--orange); text-align: right; vertical-align: middle; padding-left: 6px;
     }
+
     /* ── LIT TEA levels ──────────────────────────────────── */
     .lit-levels { display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap; }
     .lit-level {
       font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700;
       letter-spacing: 1px; text-transform: uppercase;
-      background: rgba(224,120,40,0.20); border: 1px solid rgba(224,120,40,0.50);
-      color: var(--orange-lt); padding: 3px 8px; border-radius: 3px;
+      background: rgba(191,82,0,0.10); border: 1px solid rgba(191,82,0,0.40);
+      color: var(--orange); padding: 3px 8px; border-radius: 3px;
     }
+
     /* ── Sub-category note ───────────────────────────────── */
     .sub-note {
       display: block;
@@ -251,7 +257,7 @@
 
 <header id="header">
   <div class="hdr-brand">
-    <img src="Logo.jpeg" class="hdr-logo" alt="">
+    <img src="BBCCGreen.svg" class="hdr-logo" alt="">
     <div class="hdr-title">Big <span>Boom</span> Coffee Company</div>
   </div>
   <div class="hdr-hours">Open 5:00am – 2:00pm &nbsp;·&nbsp; Lunch served from 10:30am</div>
@@ -270,7 +276,7 @@
       {id:"mocha-frappe",name:"Mocha Frappe",sizes:[{label:"16oz",price:"5.75"},{label:"20oz",price:"6.75"}]},
       {id:"espresso",name:"Espresso",sizes:[{label:"Single",price:"2.99"},{label:"Double",price:"4.99"}]},
       {id:"tea",name:"Tea",sizes:[{label:"16oz",price:"2.49"},{label:"20oz",price:"2.79"},{label:"32oz",price:"3.49"}]},
-      {id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"Cherry Boom (Cherry/Lemonade)  \u00b7  Firecracker Punch (Fruit Punch)  \u00b7  Blue Bomb (Blue Raspberry)  \u00b7  Fourth of July (Blue Raspberry/Cherry)",levels:["No Lit","Not So Lit","Lit","Boosted"],special:true},
+      {id:"lit-tea",name:"LIT TEA!!!",price:"7.99",description:"Cherry Boom (Cherry/Lemonade) \u00b7 Firecracker Punch (Fruit Punch) \u00b7 Blue Bomb (Blue Raspberry) \u00b7 Fourth of July (Blue Raspberry/Cherry)",levels:["No Lit","Not So Lit","Lit","Boosted"],special:true},
       {id:"scones",name:"Scones",price:"3.79",description:"Chocolate \u00b7 Blueberry \u00b7 Flavor of the Day",subCategory:"Bakery"},
       {id:"muffins",name:"Banana Nut Muffins",price:"3.99",subCategory:"Bakery"}
     ]},
@@ -283,7 +289,7 @@
       {id:"breakfast-bowl",name:"Breakfast Bowl",price:"6.99",description:"Bacon or Sausage",subCategory:"Bowls",subCategoryNote:"All include Eggs & Cheese"},
       {id:"big-breakfast-bowl",name:"Big Breakfast Bowl",price:"7.99",description:"Sausage, Bacon, Gravy, Potatoes",subCategory:"Bowls"},
       {id:"biscuits-gravy",name:"Biscuits & Gravy Bowl",price:"7.49",description:"Biscuit, Gravy",subCategory:"Bowls"},
-      {id:"grits-bowl",name:"Grits Bowl",price:"7.49",description:"Bacon or Sausage",subCategory:"Bowls"},
+      {id:"grits-bowl",name:"Grits Bowl",price:"7.49",description:"Bacon or Sausage",subCategory:"Bowls"}
     ]},
     {id:"lunch",title:"Lunch",note:"Served from 10:30am",items:[
       {id:"paninis",name:"Paninis",price:"9.49",description:"Turkey, Ham or Roast Beef \u00b7 Cheese & Boom Sauce"},

@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <!--
-  STATIC PORTRAIT MENU — no server or Firebase needed.
+  STATIC PORTRAIT MENU — Light Theme (Lunch, outdoor/bright environment)
   Open in Chrome → F11 for fullscreen on the vertical TV.
-  To export as image: Chrome → Print → Save as PDF, then convert to PNG.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1080, initial-scale=1.0">
-  <title>Big Boom Coffee Company — Menu</title>
+  <title>Big Boom Coffee Company — Lunch Menu (Light)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
@@ -22,10 +21,6 @@
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* ── Bright outdoor theme ────────────────────────────── *
-     * Light backgrounds outperform dark in direct sun —     *
-     * ambient light adds to bright areas rather than        *
-     * washing out light-on-dark text.                       */
     body {
       width: 1080px;
       height: 1920px;
@@ -38,7 +33,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Header — keep dark for brand identity ───────────── */
+    /* ── Header ─────────────────────────────────────────── */
     #header {
       flex-shrink: 0;
       display: flex;
@@ -51,7 +46,7 @@
       color: #fff;
     }
     .hdr-brand { display: flex; align-items: center; gap: 16px; }
-    .hdr-logo  { height: 80px; border-radius: 6px; }
+    .hdr-logo  { height: 80px; }
     .hdr-title {
       font-family: 'Playfair Display', serif;
       font-size: 46px;
@@ -77,7 +72,6 @@
       grid-template-columns: 1fr 1fr;
       overflow: hidden;
       position: relative;
-      /* Scoped tokens for dark-on-light content */
       --orange:   #bf5200;
       --orange-lt:#d46010;
       --sage-lt:  #3d5c18;
@@ -88,7 +82,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background-image: url('Logo.jpeg');
+      background-image: url('BBCCCream.svg');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -147,7 +141,7 @@
     .item-top { display: flex; align-items: baseline; gap: 6px; }
     .item-name {
       font-family: 'Lato', sans-serif;
-      font-size: 27px;
+      font-size: 24px;
       font-weight: 700;
       flex: 1;
       line-height: 1.15;
@@ -161,7 +155,7 @@
     }
     .item-price {
       font-family: 'Oswald', sans-serif;
-      font-size: 27px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--orange);
     }
@@ -242,7 +236,7 @@
 
 <header id="header">
   <div class="hdr-brand">
-    <img src="Logo.jpeg" class="hdr-logo" alt="">
+    <img src="BBCCGreen.svg" class="hdr-logo" alt="">
     <div class="hdr-title">Big <span>Boom</span> Coffee</div>
   </div>
   <div class="hdr-hours">Open 5:00am – 2:00pm</div>
@@ -264,16 +258,15 @@
     {id:"scones",name:"Scones",price:"3.79",description:"Chocolate \u00b7 Blueberry \u00b7 Flavor of the Day",subCategory:"Bakery"},
     {id:"muffins",name:"Banana Nut Muffins",price:"3.99",subCategory:"Bakery"}
   ]};
-  const BREAKFAST = {id:"breakfast",title:"Breakfast",note:"Served 5:00am \u2013 10:30am",items:[
-    {id:"breakfast-burrito",name:"Breakfast Burrito",price:"6.49",description:"Bacon or Sausage",subCategory:"Burritos & Sandwiches",subCategoryNote:"All include Eggs & Cheese"},
-    {id:"big-boom-burrito",name:"Big Boom Burrito",price:"6.99",description:"Sausage, Bacon, Gravy, Potatoes",subCategory:"Burritos & Sandwiches"},
-    {id:"flaky-boom",name:"The Flaky Boom",price:"6.49",description:"Croissant, Bacon or Sausage",subCategory:"Burritos & Sandwiches"},
-    {id:"breakfast-biscuit",name:"The Breakfast Biscuit",price:"6.49",description:"Biscuit, Bacon or Sausage",subCategory:"Burritos & Sandwiches"},
-    {id:"kids-breakfast",name:"Kids Breakfast",price:"5.99",description:"Biscuit, Bacon or Sausage",subCategory:"Burritos & Sandwiches"},
-    {id:"breakfast-bowl",name:"Breakfast Bowl",price:"6.99",description:"Bacon or Sausage",subCategory:"Bowls",subCategoryNote:"All include Eggs & Cheese"},
-    {id:"big-breakfast-bowl",name:"Big Breakfast Bowl",price:"7.99",description:"Sausage, Bacon, Gravy, Potatoes",subCategory:"Bowls"},
-    {id:"biscuits-gravy",name:"Biscuits & Gravy Bowl",price:"7.49",description:"Biscuit, Gravy",subCategory:"Bowls"},
-    {id:"grits-bowl",name:"Grits Bowl",price:"7.49",description:"Bacon or Sausage",subCategory:"Bowls"}
+  const LUNCH = {id:"lunch",title:"Lunch",note:"Served from 10:30am",items:[
+    {id:"paninis",name:"Paninis",price:"9.49",description:"Turkey, Ham or Roast Beef \u00b7 Cheese & Boom Sauce"},
+    {id:"garden-salad",name:"Garden Salad",price:"7.99",description:"Spring Mix, Cheese, Tomatoes"},
+    {id:"blt",name:"BLT",price:"8.99",description:"Spring Mix, Bacon, Lettuce, Tomato"},
+    {id:"club-salad",name:"Club Salad",price:"10.49",description:"Ham, Bacon, Lettuce, Tomato"},
+    {id:"chicken-salad",name:"Chicken Salad",price:"10.49",description:"Chicken, Bacon, Lettuce, Tomato"},
+    {id:"lunch-combo",name:"Lunch Combo",price:"13.49",description:"Choice of Sandwich, Chips & Drink"},
+    {id:"kids-lunch",name:"Kids Lunch",price:"5.99",description:"Grilled Cheese, Chips & Drink"},
+    {id:"soup",name:"Soup of the Day",price:null,badge:"Coming Soon!"}
   ]};
 
   function buildCol(section) {
@@ -298,7 +291,7 @@
     return html;
   }
 
-  [COFFEE, BREAKFAST].forEach(section => {
+  [COFFEE, LUNCH].forEach(section => {
     const col = document.createElement('div');
     col.className = 'col';
     col.innerHTML = buildCol(section);

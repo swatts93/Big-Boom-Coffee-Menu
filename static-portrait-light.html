@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <!--
-  STATIC PORTRAIT MENU — no server or Firebase needed.
+  STATIC PORTRAIT MENU — Light Theme (outdoor/bright environment)
   Open in Chrome → F11 for fullscreen on the vertical TV.
-  To export as image: Chrome → Print → Save as PDF, then convert to PNG.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1080, initial-scale=1.0">
-  <title>Big Boom Coffee Company — Menu</title>
+  <title>Big Boom Coffee Company — Menu (Light)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
@@ -22,10 +21,7 @@
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* ── Bright outdoor theme ────────────────────────────── *
-     * Light backgrounds outperform dark in direct sun —     *
-     * ambient light adds to bright areas rather than        *
-     * washing out light-on-dark text.                       */
+    /* ── Bright outdoor theme ────────────────────────────── */
     body {
       width: 1080px;
       height: 1920px;
@@ -51,7 +47,7 @@
       color: #fff;
     }
     .hdr-brand { display: flex; align-items: center; gap: 16px; }
-    .hdr-logo  { height: 80px; border-radius: 6px; }
+    .hdr-logo  { height: 80px; }
     .hdr-title {
       font-family: 'Playfair Display', serif;
       font-size: 46px;
@@ -88,7 +84,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background-image: url('Logo.jpeg');
+      background-image: url('BBCCCream.svg');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -147,7 +143,7 @@
     .item-top { display: flex; align-items: baseline; gap: 6px; }
     .item-name {
       font-family: 'Lato', sans-serif;
-      font-size: 27px;
+      font-size: 24px;
       font-weight: 700;
       flex: 1;
       line-height: 1.15;
@@ -161,7 +157,7 @@
     }
     .item-price {
       font-family: 'Oswald', sans-serif;
-      font-size: 27px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--orange);
     }
@@ -242,7 +238,7 @@
 
 <header id="header">
   <div class="hdr-brand">
-    <img src="Logo.jpeg" class="hdr-logo" alt="">
+    <img src="BBCCGreen.svg" class="hdr-logo" alt="">
     <div class="hdr-title">Big <span>Boom</span> Coffee</div>
   </div>
   <div class="hdr-hours">Open 5:00am – 2:00pm</div>
