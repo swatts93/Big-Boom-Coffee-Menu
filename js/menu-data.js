@@ -283,6 +283,7 @@ function toArray(val) {
 function normalizeMenu(data) {
   if (!data || !data.sections) return DEFAULT_MENU;
   return {
+    theme: data.theme || 'dark',
     sections: toArray(data.sections).map(s => ({
       ...s,
       items: toArray(s.items).map(item => ({

@@ -149,6 +149,19 @@
 
     .app-header .spacer { flex: 1; }
 
+    #theme-select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--cream);
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      padding: 6px 12px;
+      cursor: pointer;
+      outline: none;
+    }
+    #theme-select:focus { border-color: var(--orange); }
+
     #save-status {
       font-size: 14px;
       color: var(--sage);
@@ -410,6 +423,7 @@
     <img src="Logo.jpeg" alt="">
     <h1>Menu Admin</h1>
     <div class="spacer"></div>
+    <select id="theme-select" onchange="setTheme(this.value)"></select>
     <div id="save-status">Not connected</div>
   </div>
 
@@ -498,6 +512,7 @@
 </div>
 
 <script src="js/config.js"></script>
+<script src="js/themes.js"></script>
 <script src="js/menu-data.js"></script>
 <script>
   // ── State ───────────────────────────────────────────────
@@ -555,8 +570,23 @@
       });
   }
 
+  // ── Theme picker ─────────────────────────────────────────
+  function buildThemeSelect(currentKey) {
+    const sel = document.getElementById('theme-select');
+    sel.innerHTML = Object.entries(THEMES)
+      .map(([key, t]) => `<option value="${key}">${t.emoji} ${t.name}</option>`)
+      .join('');
+    sel.value = currentKey || 'dark';
+  }
+
+  function setTheme(key) {
+    menu.theme = key;
+    saveToServer();
+  }
+
   // ── UI ──────────────────────────────────────────────────
   function buildUI(m) {
+    buildThemeSelect(m.theme);
     buildTabs(m);
     renderSection(activeSectionIndex);
   }

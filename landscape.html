@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style id="theme-vars"></style>
   <style>
     /* ── Layout ───────────────────────────────────────────── */
     body {
@@ -315,6 +316,7 @@
 
   <div id="columns"></div>
 
+  <script src="js/themes.js"></script>
   <script src="js/menu-data.js"></script>
   <script>
     // ── Coffee oz-grid ────────────────────────────────────
@@ -435,11 +437,21 @@
       });
     }
 
+    // ── Theme ─────────────────────────────────────────────
+    function applyTheme(key) {
+      const theme = THEMES[key] || THEMES.dark;
+      document.getElementById('theme-vars').textContent = theme.css;
+    }
+
     // ── Data loading — polls server every 30s ─────────────
     function loadMenu() {
       fetch('/api/menu')
         .then(r => r.json())
-        .then(data => render(normalizeMenu(data)))
+        .then(data => {
+          const menu = normalizeMenu(data);
+          applyTheme(menu.theme);
+          render(menu);
+        })
         .catch(() => render(DEFAULT_MENU));
     }
     loadMenu();
