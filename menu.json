@@ -50,9 +50,16 @@
         { "id": "lunch-combo", "name": "Lunch Combo", "price": "13.49", "description": "Choice of Sandwich, Chips & Drink" },
         { "id": "kids-lunch", "name": "Kids Lunch", "price": "5.99", "description": "Grilled Cheese, Chips & Drink" },
         { "id": "kids-chicken-fingers", "name": "Kids Chicken Fingers", "price": "5.99", "description": "4pc Chicken Fingers, Chips & Drink" },
-        { "id": "soup", "name": "Soup of the Day", "badge": "Coming Soon!" },
-        { "id": "scones", "name": "Scones", "price": "3.79", "description": "Chocolate · Blueberry · Flavor of the Day", "subCategory": "Bakery" },
-        { "id": "muffins", "name": "Banana Nut Muffins", "price": "3.99", "subCategory": "Bakery" }
+        { "id": "soup", "name": "Soup of the Day", "badge": "Coming Soon!" }
+      ]
+    },
+    {
+      "id": "bakery",
+      "title": "Bakery",
+      "note": null,
+      "items": [
+        { "id": "scones", "name": "Scones", "price": "3.79", "description": "Chocolate · Blueberry · Flavor of the Day" },
+        { "id": "muffins", "name": "Banana Nut Muffins", "price": "3.99" }
       ]
     }
   ]
