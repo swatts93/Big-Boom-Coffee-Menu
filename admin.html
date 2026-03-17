@@ -386,19 +386,7 @@
       margin-top: 16px;
     }
 
-    /* ── Firebase warning ─────────────────────────────────── */
-    .firebase-banner {
-      background: rgba(212,113,42,0.15);
-      border: 1px solid rgba(212,113,42,0.4);
-      border-radius: var(--radius);
-      padding: 12px 18px;
-      margin-bottom: 20px;
-      font-size: 14px;
-      color: var(--cream);
-      line-height: 1.5;
-    }
 
-    .firebase-banner strong { color: var(--orange); }
   </style>
 </head>
 <body>
@@ -428,8 +416,7 @@
   <div class="tabs" id="tabs"></div>
 
   <div class="content">
-    <div id="firebase-banner-area"></div>
-    <div class="item-list" id="item-list"></div>
+<div class="item-list" id="item-list"></div>
     <button class="btn btn-success add-item-btn" onclick="openAddModal()">+ Add Item</button>
   </div>
 </div>
@@ -512,11 +499,8 @@
 
 <script src="js/config.js"></script>
 <script src="js/menu-data.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
   // ── State ───────────────────────────────────────────────
-  let db = null;
   let menu = JSON.parse(JSON.stringify(DEFAULT_MENU)); // deep copy
   let activeSectionIndex = 0;
   let editingItemId = null;  // null = adding new
@@ -527,59 +511,48 @@
     if (val === ADMIN_PASSWORD) {
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('admin-app').style.display = 'block';
-      initFirebase();
+      initAdmin();
     } else {
       document.getElementById('pw-error').textContent = 'Incorrect password.';
       document.getElementById('pw-input').value = '';
     }
   }
 
-  // ── Firebase ────────────────────────────────────────────
-  function initFirebase() {
+  // ── Server sync ─────────────────────────────────────────
+  function initAdmin() {
     const status = document.getElementById('save-status');
+    status.textContent = 'Loading…';
 
-    if (firebaseConfig.apiKey === 'YOUR_API_KEY') {
-      document.getElementById('firebase-banner-area').innerHTML = `
-        <div class="firebase-banner">
-          <strong>Firebase not configured.</strong> Changes made here will NOT sync to the TVs
-          until you set up Firebase. See <code>SETUP.md</code> for instructions.
-          You can still preview how the menu looks.
-        </div>`;
-      status.textContent = 'Local only';
-      buildUI(menu);
-      return;
-    }
-
-    try {
-      firebase.initializeApp(firebaseConfig);
-      db = firebase.database();
-
-      db.ref('menu').on('value', snap => {
-        const raw = snap.val();
-        if (raw) {
-          menu = normalizeMenu(raw);
-        } else {
-          menu = JSON.parse(JSON.stringify(DEFAULT_MENU));
-          db.ref('menu').set(menu);
-        }
+    fetch('/api/menu')
+      .then(r => r.json())
+      .then(data => {
+        menu = normalizeMenu(data);
         buildUI(menu);
-        status.textContent = 'Live — changes save instantly';
-        status.className = '';
-      }, err => {
-        status.textContent = 'Connection error';
+        status.textContent = 'Connected';
+      })
+      .catch(() => {
+        buildUI(menu);
+        status.textContent = 'Server not found';
         status.className = 'error';
-        buildUI(menu);
       });
-    } catch (e) {
-      status.textContent = 'Firebase error';
-      status.className = 'error';
-      buildUI(menu);
-    }
   }
 
-  function saveToFirebase() {
-    if (!db) return;
-    db.ref('menu').set(menu);
+  function saveToServer() {
+    const status = document.getElementById('save-status');
+    fetch('/api/menu', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(menu)
+    })
+      .then(() => {
+        status.textContent = 'Saved ✓';
+        status.className = '';
+        setTimeout(() => { status.textContent = 'Connected'; }, 2000);
+      })
+      .catch(() => {
+        status.textContent = 'Save failed';
+        status.className = 'error';
+      });
   }
 
   // ── UI ──────────────────────────────────────────────────
@@ -643,7 +616,7 @@
   // ── Sold out quick-toggle ────────────────────────────────
   function toggleSoldOut(itemId, val) {
     findItem(itemId).soldOut = val || undefined;
-    saveToFirebase();
+    saveToServer();
     renderSection(activeSectionIndex);
   }
 
@@ -764,7 +737,7 @@
       section.items.push(itemData);
     }
 
-    saveToFirebase();
+    saveToServer();
     renderSection(activeSectionIndex);
     document.getElementById('modal-overlay').classList.remove('open');
   }
@@ -773,7 +746,7 @@
     if (!confirm('Delete this item? This cannot be undone.')) return;
     const section = menu.sections[activeSectionIndex];
     section.items = section.items.filter(i => i.id !== editingItemId);
-    saveToFirebase();
+    saveToServer();
     renderSection(activeSectionIndex);
     document.getElementById('modal-overlay').classList.remove('open');
   }

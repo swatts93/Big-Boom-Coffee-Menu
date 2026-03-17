@@ -312,10 +312,7 @@
     <div class="col col-right" id="col-right"></div>
   </div>
 
-  <script src="js/config.js"></script>
   <script src="js/menu-data.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <script>
     // ── Returns true after 10:30am ────────────────────────
     function isLunchTime() {
@@ -413,26 +410,15 @@
       }
     }, 10000); // check every 10 seconds
 
-    // ── Firebase / data loading ───────────────────────────
-    if (firebaseConfig.apiKey !== 'YOUR_API_KEY') {
-      try {
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        db.ref('menu').on('value', snap => {
-          const raw = snap.val();
-          if (raw) {
-            render(normalizeMenu(raw));
-          } else {
-            db.ref('menu').set(DEFAULT_MENU);
-            render(DEFAULT_MENU);
-          }
-        }, () => render(DEFAULT_MENU));
-      } catch (e) {
-        render(DEFAULT_MENU);
-      }
-    } else {
-      render(DEFAULT_MENU);
+    // ── Data loading — polls server every 30s ─────────────
+    function loadMenu() {
+      fetch('/api/menu')
+        .then(r => r.json())
+        .then(data => render(normalizeMenu(data)))
+        .catch(() => render(DEFAULT_MENU));
     }
+    loadMenu();
+    setInterval(loadMenu, 30000);
   </script>
 </body>
 </html>

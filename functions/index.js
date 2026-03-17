@@ -5,13 +5,11 @@ const axios      = require('axios');
 admin.initializeApp();
 
 // ── Toast API endpoints ────────────────────────────────────────────────────
-const TOAST_BASE   = 'https://ws-api.toasttab.com';
-const TOAST_AUTH   = `${TOAST_BASE}/authentication/v1/authentication/login`;
-const TOAST_MENUS  = `${TOAST_BASE}/menus/v2/menus`;
-const TOAST_AVAIL  = `${TOAST_BASE}/menus/v2/itemAvailability`;
+const TOAST_BASE  = 'https://ws-api.toasttab.com';
+const TOAST_AUTH  = `${TOAST_BASE}/authentication/v1/authentication/login`;
+const TOAST_MENUS = `${TOAST_BASE}/menus/v2/menus`;
 
 // ── Categories to exclude from the TV display (retail, merch, etc.) ───────
-// Add any Toast menu group names you want hidden from the boards
 const EXCLUDED_CATEGORIES = [
   'retail',
   'merchandise',
@@ -33,70 +31,82 @@ async function getToken(clientId, clientSecret) {
   return data.token.accessToken;
 }
 
-// ── Fetch menus + availability in parallel ─────────────────────────────────
-async function fetchToastData(token, restaurantGuid) {
-  const headers = {
-    'Authorization':                 `Bearer ${token}`,
-    'Toast-Restaurant-External-ID':  restaurantGuid,
-  };
-
-  const [menusRes, availRes] = await Promise.all([
-    axios.get(TOAST_MENUS, { headers }),
-    axios.get(TOAST_AVAIL, { headers }).catch(() => ({ data: [] })),
-  ]);
-
-  return {
-    menus:        menusRes.data,
-    availability: availRes.data,
-  };
-}
-
-// ── Build a Set of out-of-stock item GUIDs ─────────────────────────────────
-function buildOutOfStockSet(availability) {
-  const set = new Set();
-  if (!Array.isArray(availability)) return set;
-  availability.forEach(a => {
-    if (a.available === false || a.outOfStock === true) {
-      set.add(a.guid);
-    }
+// ── Fetch restaurant menus ─────────────────────────────────────────────────
+// Returns a Restaurant object: { menus[], modifierGroupReferences{}, modifierOptionReferences{} }
+async function fetchRestaurant(token, restaurantGuid) {
+  const { data } = await axios.get(TOAST_MENUS, {
+    headers: {
+      'Authorization':                `Bearer ${token}`,
+      'Toast-Restaurant-External-ID': restaurantGuid,
+    },
   });
-  return set;
+  return data;
 }
 
-// ── Detect if a modifier group represents drink sizes ─────────────────────
-const SIZE_PATTERN = /\d+\s*oz|small|medium|large|single|double/i;
+// ── Build modifier lookup maps from the top-level Restaurant reference maps ─
+// V2 stores all modifier groups/options at the Restaurant level, referenced by
+// integer referenceIds from MenuItem.modifierGroupReferences arrays.
+function buildModifierMaps(restaurant) {
+  // keyed by GUID — used to find the size group from pricingRules.sizeSpecificPricingGuid
+  const groupsByGuid = {};
+  Object.values(restaurant.modifierGroupReferences || {}).forEach(mg => {
+    groupsByGuid[mg.guid] = mg;
+  });
 
-function findSizeGroup(modifierGroups) {
-  if (!Array.isArray(modifierGroups)) return null;
-  return modifierGroups.find(mg =>
-    Array.isArray(mg.modifiers) &&
-    mg.modifiers.some(m => SIZE_PATTERN.test(m.name))
-  ) || null;
+  // keyed by referenceId integer — used to look up size options
+  const optionsByRef = {};
+  Object.values(restaurant.modifierOptionReferences || {}).forEach(mo => {
+    optionsByRef[mo.referenceId] = mo;
+  });
+
+  return { groupsByGuid, optionsByRef };
+}
+
+// ── For SIZE_PRICE items: find the size modifier group and extract sizes ───
+// Toast encodes coffee-style multi-size pricing as:
+//   item.pricingStrategy === 'SIZE_PRICE'
+//   item.pricingRules.sizeSpecificPricingGuid → a ModifierGroup
+//   that ModifierGroup.modifierOptionReferences → array of referenceIds
+//   each ModifierOption has .name ("12oz") and .price (4.49)
+function getSizes(item, groupsByGuid, optionsByRef) {
+  if (item.pricingStrategy !== 'SIZE_PRICE') return null;
+  const sizeGuid = item.pricingRules && item.pricingRules.sizeSpecificPricingGuid;
+  if (!sizeGuid) return null;
+
+  const sizeGroup = groupsByGuid[sizeGuid];
+  if (!sizeGroup || !Array.isArray(sizeGroup.modifierOptionReferences)) return null;
+
+  const sizes = sizeGroup.modifierOptionReferences
+    .map(refId => optionsByRef[refId])
+    .filter(mo => mo && mo.price != null)
+    .map(mo => ({ label: mo.name, price: mo.price.toFixed(2) }));
+
+  return sizes.length > 1 ? sizes : null;
+}
+
+// ── Determine if an item should appear on the menu board ──────────────────
+// visibility[] is empty when an item is hidden from all channels.
+// We include items visible on POS; null/missing visibility is treated as visible.
+function isVisible(item) {
+  const vis = item.visibility;
+  if (!Array.isArray(vis)) return true;   // unset = include
+  if (vis.length === 0) return false;     // explicitly hidden everywhere
+  return vis.includes('POS');
 }
 
 // ── Transform a single Toast menu item → our format ───────────────────────
-function transformItem(toastItem, outOfStock) {
+function transformItem(toastItem, groupsByGuid, optionsByRef) {
   const base = {
-    id:      toastItem.guid,
-    name:    toastItem.name,
-    soldOut: outOfStock.has(toastItem.guid) || undefined,
+    id:   toastItem.guid,
+    name: toastItem.name,
   };
 
-  // Remove undefined keys to keep Firebase tidy
-  if (!base.soldOut) delete base.soldOut;
-
-  const sizeGroup = findSizeGroup(toastItem.modifierGroups);
-
-  if (sizeGroup && sizeGroup.modifiers.length > 1) {
-    // Coffee-style item — build sizes array
+  const sizes = getSizes(toastItem, groupsByGuid, optionsByRef);
+  if (sizes) {
     return {
       ...base,
-      note: toastItem.description || undefined,
-      sizes: sizeGroup.modifiers.map(m => ({
-        label: m.name,
-        // Base price + modifier price
-        price: ((toastItem.price || 0) + (m.price || 0)).toFixed(2),
-      })),
+      note:  toastItem.description || undefined,
+      sizes,
     };
   }
 
@@ -107,28 +117,38 @@ function transformItem(toastItem, outOfStock) {
   };
 }
 
-// ── Transform Toast menus → our sections format ───────────────────────────
-function transformMenu(toastMenus, availability) {
-  const outOfStock = buildOutOfStockSet(availability);
-  const sections   = [];
+// ── Recursively collect items from a MenuGroup and its nested children ─────
+// Child menu groups become subCategory dividers within the parent section.
+function collectItems(group, groupsByGuid, optionsByRef, subCategoryName) {
+  const items = [];
 
-  (toastMenus || []).forEach(menu => {
+  (group.menuItems || []).forEach(item => {
+    if (!isVisible(item)) return;
+    const transformed = transformItem(item, groupsByGuid, optionsByRef);
+    if (subCategoryName) transformed.subCategory = subCategoryName;
+    items.push(transformed);
+  });
+
+  (group.menuGroups || []).forEach(child => {
+    const childNameLower = (child.name || '').toLowerCase();
+    if (EXCLUDED_CATEGORIES.some(ex => childNameLower.includes(ex))) return;
+    items.push(...collectItems(child, groupsByGuid, optionsByRef, child.name));
+  });
+
+  return items;
+}
+
+// ── Transform Restaurant → our { sections } format ────────────────────────
+function transformMenu(restaurant) {
+  const { groupsByGuid, optionsByRef } = buildModifierMaps(restaurant);
+  const sections = [];
+
+  (restaurant.menus || []).forEach(menu => {
     (menu.menuGroups || []).forEach(group => {
-      // Skip excluded categories (case-insensitive)
       const groupNameLower = (group.name || '').toLowerCase();
       if (EXCLUDED_CATEGORIES.some(ex => groupNameLower.includes(ex))) return;
 
-      const items = (group.menuItems || [])
-        .filter(item => {
-          // Skip items not visible on online ordering
-          const vis = item.visibility;
-          if (Array.isArray(vis) && vis.length && !vis.includes('TOAST_ONLINE_ORDERING')) {
-            return false;
-          }
-          return true;
-        })
-        .map(item => transformItem(item, outOfStock));
-
+      const items = collectItems(group, groupsByGuid, optionsByRef, null);
       if (items.length === 0) return;
 
       sections.push({
@@ -155,9 +175,9 @@ async function runSync(config) {
     );
   }
 
-  const token           = await getToken(clientId, clientSecret);
-  const { menus, availability } = await fetchToastData(token, restaurantGuid);
-  const menuData        = transformMenu(menus, availability);
+  const token      = await getToken(clientId, clientSecret);
+  const restaurant = await fetchRestaurant(token, restaurantGuid);
+  const menuData   = transformMenu(restaurant);
 
   await admin.database().ref('menu').set(menuData);
 
@@ -187,17 +207,16 @@ exports.syncToastMenu = functions.pubsub
     return null;
   });
 
-// ── Manual HTTP trigger — POST /syncNow with header x-sync-secret ─────────
+// ── Manual HTTP trigger — POST /syncNow with optional x-sync-secret header ─
 exports.syncNow = functions.https.onRequest(async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).send('Use POST');
     return;
   }
 
-  const cfg    = functions.config().toast    || {};
-  const syncCfg = functions.config().sync   || {};
+  const cfg     = functions.config().toast || {};
+  const syncCfg = functions.config().sync  || {};
 
-  // Optional secret header to prevent random people triggering syncs
   if (syncCfg.secret && req.headers['x-sync-secret'] !== syncCfg.secret) {
     res.status(401).send('Unauthorized');
     return;
