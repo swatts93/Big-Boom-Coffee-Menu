@@ -16,19 +16,28 @@ const THEMES = {
     css: `
       :root {
         --bg:          #fdf5e4;
-        --brown-dk:    #fdf5e4;
         --orange:      #bf5200;
         --orange-lt:   #d46010;
+        --sage:        #4a6020;
         --sage-lt:     #3d5c18;
         --cream:       #1a0800;
         --cream-dim:   #5c3010;
-        --text-muted:  #5c3010;
-        --divider:     rgba(140,70,0,0.25);
+        --divider:     rgba(140,70,0,0.28);
       }
-      /* Keep header text readable on the dark header gradient */
-      .header-title, .hdr-title { color: #f2e4c6 !important; }
-      .header-hours, .hdr-hours { color: #b8c88a !important; }
-      .item-name, .cg-name { text-shadow: none !important; }
+      /* Header stays dark — only override text colors */
+      .hdr-title { color: #fff !important; }
+      .hdr-hours { color: #b8c88a !important; }
+      /* No text-shadow on dark text over cream bg; force dark color on oz-grid names */
+      .item-name, .cg-name { text-shadow: none !important; color: #1a0800 !important; }
+      .item-price { text-shadow: none !important; }
+      /* Cream watermark with multiply blend looks correct on light bg */
+      #columns::before {
+        background-image: url('BBCCCream.svg') !important;
+        opacity: 0.12 !important;
+        mix-blend-mode: multiply !important;
+      }
+      /* Middle column tint */
+      .col:nth-child(2) { background: rgba(0,0,0,0.025) !important; }
     `
   },
 

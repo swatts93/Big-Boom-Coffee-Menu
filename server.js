@@ -25,7 +25,7 @@ http.createServer((req, res) => {
   if (req.method === 'GET' && url === '/api/menu') {
     try {
       const data = fs.readFileSync(MENU_FILE, 'utf8');
-      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       res.end(data);
     } catch {
       res.writeHead(404);
@@ -67,7 +67,7 @@ http.createServer((req, res) => {
 
   fs.readFile(filePath, (err, data) => {
     if (err) { res.writeHead(404); res.end('Not found'); return; }
-    res.writeHead(200, { 'Content-Type': mime });
+    res.writeHead(200, { 'Content-Type': mime, 'Cache-Control': 'no-store' });
     res.end(data);
   });
 

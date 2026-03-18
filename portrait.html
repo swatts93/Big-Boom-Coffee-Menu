@@ -6,36 +6,36 @@
   <title>Big Boom Coffee Company — Menu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Oswald:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <style id="theme-vars"></style>
   <style>
-    /* ── Sunlight theme: warm cream background, high-contrast dark text ── *
-     * Light backgrounds outperform dark in direct sun — ambient light adds  *
-     * to bright areas rather than washing out light-on-dark text.           */
+    :root {
+      --orange:    #e07828;
+      --orange-lt: #f0983c;
+      --sage:      #8a9560;
+      --sage-lt:   #b8c88a;
+      --rust:      #a84b28;
+      --bg:        #080401;
+      --brown-md:  #1a1008;
+      --brown-lg:  #2a1a0c;
+      --divider:   rgba(224,120,40,0.30);
+      --cream:     #ffffff;
+      --cream-dim: #e0c898;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       width: 1080px;
       height: 1920px;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--cream);
       font-family: 'Lato', sans-serif;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      background: #fdf5e4;   /* override the dark --bg from style.css */
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Re-scope color tokens inside the content area only so the dark
-       header gradient and white header text remain untouched.          */
-    #columns {
-      --cream:      #1a0800;   /* primary text  → near-black espresso  */
-      --cream-dim:  #5c3010;   /* secondary     → dark warm brown      */
-      --text-muted: #5c3010;
-      --muted:      #5c3010;
-      --orange:     #bf5200;   /* accent        → deep burnt orange    */
-      --orange-lt:  #d46010;
-      --sage-lt:    #3d5c18;   /* sub-labels    → dark forest sage     */
-      --divider:    rgba(140, 70, 0, 0.25);
-    }
-
-    /* ── Header ───────────────────────────────────────────── */
+    /* ── Header ─────────────────────────────────────────── */
     #header {
       flex-shrink: 0;
       display: flex;
@@ -46,45 +46,27 @@
       border-bottom: 3px solid var(--orange);
       gap: 16px;
     }
-
-    .hdr-brand {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .hdr-logo {
-      height: 80px;
-      width: auto;
-      border-radius: 6px;
-    }
-
+    .hdr-brand { display: flex; align-items: center; gap: 16px; }
+    .hdr-logo  { height: 80px; border-radius: 12px; }
     .hdr-title {
       font-family: 'Playfair Display', serif;
       font-size: 46px;
       font-weight: 900;
-      color: var(--cream);
       letter-spacing: 1.5px;
       text-transform: uppercase;
       line-height: 1;
+      color: #fff;
     }
-
-    .hdr-title span { color: var(--orange); }
-
-    .hdr-right {
-      text-align: right;
-      flex-shrink: 0;
-    }
-
+    .hdr-title span { color: var(--orange-lt); }
     .hdr-hours {
       font-family: 'Oswald', sans-serif;
-      font-size: 18px;
+      font-size: 22px;
       color: var(--sage-lt);
       letter-spacing: 0.8px;
-      margin-top: 4px;
+      text-align: right;
     }
 
-    /* ── Two-column layout ────────────────────────────────── */
+    /* ── Two-column layout ──────────────────────────────── */
     #columns {
       flex: 1;
       display: grid;
@@ -92,34 +74,29 @@
       overflow: hidden;
       position: relative;
     }
-
-    /* ── Logo watermark ───────────────────────────────────── */
     #columns::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: url('Logo.jpeg');
+      background-image: url('BBCCCream.svg');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      opacity: 0.10;
-      mix-blend-mode: multiply;   /* darkens logo onto cream bg correctly */
+      opacity: 0.07;
       pointer-events: none;
       z-index: 0;
     }
-
     .col {
-      padding: 28px 30px 20px;
-      overflow: hidden;
+      padding: 28px 26px 20px;
       border-right: 2px solid var(--divider);
+      overflow: hidden;
       position: relative;
       z-index: 1;
     }
-
     .col:last-child { border-right: none; }
-    .col:nth-child(2) { background: rgba(0,0,0,0.025); }
+    .col:nth-child(2) { background: rgba(255,255,255,0.012); }
 
-    /* ── Section header ───────────────────────────────────── */
+    /* ── Section header ─────────────────────────────────── */
     .sec-title {
       font-family: 'Playfair Display', serif;
       font-size: 38px;
@@ -129,129 +106,80 @@
       letter-spacing: 2px;
       line-height: 1;
     }
-
     .sec-note {
       display: block;
       font-family: 'Oswald', sans-serif;
-      font-size: 19px;
-      font-weight: 400;
+      font-size: 18px;
       color: var(--sage-lt);
       letter-spacing: 1.5px;
       margin-top: 5px;
     }
-
     .sec-rule {
       height: 2px;
       background: linear-gradient(to right, var(--orange), transparent);
-      margin: 10px 0 18px;
+      margin: 10px 0 14px;
     }
-
-    /* ── Transition when right column switches ────────────── */
-    .col-right {
-      transition: opacity 0.6s ease;
-    }
-
-    .col-right.switching {
-      opacity: 0;
-    }
-
-    /* ── Sub-category label ───────────────────────────────── */
     .sub-label {
       font-family: 'Oswald', sans-serif;
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 500;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--sage-lt);
-      padding-bottom: 6px;
+      padding-bottom: 5px;
       border-bottom: 1px dashed var(--divider);
-      margin: 16px 0 10px;
+      margin: 10px 0 8px;
     }
 
-    /* ── Menu item ────────────────────────────────────────── */
-    .item {
-      margin-bottom: 14px;
-    }
-
-    .item-top {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-    }
-
+    /* ── Items ───────────────────────────────────────────── */
+    .item { margin-bottom: 10px; }
+    .item-top { display: flex; align-items: baseline; gap: 6px; }
     .item-name {
       font-family: 'Lato', sans-serif;
-      font-size: 30px;
+      font-size: 24px;
       font-weight: 700;
-      color: var(--cream);
       flex: 1;
       line-height: 1.15;
       text-shadow: 0 1px 6px rgba(0,0,0,0.9);
     }
-
     .item-mod {
       font-family: 'Lato', sans-serif;
-      font-size: 18px;
+      font-size: 17px;
       font-style: italic;
       color: var(--sage-lt);
-      flex-shrink: 0;
     }
-
     .item-price {
       font-family: 'Oswald', sans-serif;
-      font-size: 30px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--orange);
-      flex-shrink: 0;
       text-shadow: 0 1px 6px rgba(0,0,0,0.9);
     }
-
     .item-sizes {
       font-family: 'Lato', sans-serif;
-      font-size: 20px;
+      font-size: 19px;
       color: var(--cream-dim);
       margin-top: 2px;
-      line-height: 1.3;
     }
-
-    .item-sizes b {
-      color: var(--orange);
-      font-weight: 700;
-    }
-
+    .item-sizes b { color: var(--orange); font-weight: 700; }
     .item-desc {
       font-family: 'Lato', sans-serif;
-      font-size: 19px;
+      font-size: 17px;
       font-style: italic;
-      color: var(--text-muted);
+      color: var(--cream-dim);
       margin-top: 2px;
       line-height: 1.3;
     }
-
-    /* ── LIT TEA special card ─────────────────────────────── */
+    .item-desc b { font-style: normal; font-weight: 700; color: var(--cream, #fff); }
     .item.special {
-      background: linear-gradient(135deg,
-        rgba(190,80,0,0.10) 0%,
-        rgba(80,110,30,0.06) 100%);
-      border: 1px solid rgba(180,75,0,0.45);
+      background: linear-gradient(135deg, rgba(224,120,40,0.14), rgba(138,149,96,0.09));
+      border: 1px solid rgba(224,120,40,0.42);
       border-radius: 8px;
-      padding: 13px 16px;
+      padding: 12px 16px;
       margin-bottom: 0;
     }
-
-    .item.special .item-name {
-      color: var(--orange);
-      font-size: 32px;
-    }
-
-    .item.special .item-desc {
-      font-style: normal;
-      font-size: 18px;
-      color: var(--cream-dim);
-      margin-top: 6px;
-    }
-    .item-desc b { font-style: normal; font-weight: 700; color: var(--text); }
-
+    .item.special .item-name { color: var(--orange-lt); font-size: 32px; }
+    .item.special .item-desc { font-style: normal; font-size: 17px; margin-top: 6px; line-height: 1.9; }
     .item-note {
       font-family: 'Oswald', sans-serif;
       font-size: 17px;
@@ -259,178 +187,165 @@
       color: var(--sage-lt);
       margin-top: 5px;
     }
-
-    /* ── LIT TEA levels ──────────────────────────────────── */
-    .lit-levels {
-      display: flex;
-      gap: 6px;
-      margin-top: 7px;
-      flex-wrap: wrap;
-    }
-    .lit-level {
+    .badge {
+      display: inline-block;
+      background: var(--sage);
+      color: var(--bg);
       font-family: 'Oswald', sans-serif;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 1px;
       text-transform: uppercase;
-      background: rgba(224,120,40,0.20);
-      border: 1px solid rgba(224,120,40,0.50);
-      color: var(--orange-lt);
-      padding: 3px 9px;
+      padding: 2px 9px;
       border-radius: 3px;
+      margin-left: 6px;
     }
 
-    /* ── Sub-category note (own line below label) ───────── */
+    /* ── Sold-out overlay ────────────────────────────────── */
+    .item.sold-out { opacity: 0.45; position: relative; }
+    .item.sold-out .item-name {
+      text-decoration: line-through;
+      text-decoration-color: rgba(255,255,255,0.6);
+    }
+    .item.sold-out::after {
+      content: 'SOLD OUT';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700;
+      letter-spacing: 4px; color: #fff;
+      background: rgba(180, 30, 10, 0.92);
+      border: 2px solid rgba(255,80,50,0.75);
+      padding: 4px 16px; border-radius: 4px;
+      pointer-events: none; white-space: nowrap;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+
+    /* ── LIT TEA levels ──────────────────────────────────── */
+    .lit-levels { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+    .lit-level {
+      font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      background: rgba(224,120,40,0.20); border: 1px solid rgba(224,120,40,0.50);
+      color: var(--orange-lt); padding: 3px 9px; border-radius: 3px;
+    }
+
+    /* ── Sub-category note ───────────────────────────────── */
     .sub-note {
       display: block;
       font-family: 'Lato', sans-serif;
-      font-size: 16px;
-      font-weight: 400;
-      font-style: italic;
-      color: var(--cream-dim);
-      text-transform: none;
-      letter-spacing: 0;
-      margin-top: 3px;
+      font-size: 16px; font-weight: 400; font-style: italic;
+      color: var(--cream-dim); text-transform: none;
+      letter-spacing: 0; margin-top: 3px;
     }
+    .kids-drinks-sep { margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--divider); }
+    .sec-divider { margin-top: 28px; }
+
+    /* ── Right column fade on breakfast→lunch switch ─────── */
+    .col-right { transition: opacity 0.6s ease; }
+    .col-right.switching { opacity: 0; }
   </style>
+  <style id="theme-vars"></style>
 </head>
 <body>
 
-  <header id="header">
-    <div class="hdr-brand">
-      <img src="Logo.jpeg" class="hdr-logo" alt="">
-      <div class="hdr-title">Big <span>Boom</span> Coffee</div>
-    </div>
-    <div class="hdr-right">
-      <div class="hdr-hours">Open 5:00am – 2:00pm</div>
-    </div>
-  </header>
-
-  <div id="columns">
-    <!-- Left column: Coffee — always visible -->
-    <div class="col" id="col-left"></div>
-    <!-- Right column: Breakfast before 10:30am, Lunch after -->
-    <div class="col col-right" id="col-right"></div>
+<header id="header">
+  <div class="hdr-brand">
+    <img src="BBCCGreen.svg" class="hdr-logo" alt="">
+    <div class="hdr-title">Big <span>Boom</span> Coffee</div>
   </div>
+  <div class="hdr-hours">Open 5:00am – 2:00pm</div>
+</header>
 
-  <script src="js/themes.js"></script>
-  <script src="js/menu-data.js"></script>
-  <script>
-    // ── Returns true after 10:30am ────────────────────────
-    function isLunchTime() {
-      const d = new Date();
-      return d.getHours() * 60 + d.getMinutes() >= 630;
+<div id="columns">
+  <div class="col" id="col-left"></div>
+  <div class="col col-right" id="col-right"></div>
+</div>
+
+<script src="js/themes.js"></script>
+<script src="js/menu-data.js"></script>
+<script>
+  function isLunchTime() {
+    const d = new Date();
+    return d.getHours() * 60 + d.getMinutes() >= 630;
+  }
+
+  function itemHTML(item) {
+    const extraCls = item.kidsSep ? ' kids-drinks-sep' : '';
+    const cls = ['item', item.special && 'special', item.soldOut && 'sold-out'].filter(Boolean).join(' ') + extraCls;
+    if (item.sizes && item.sizes.length) {
+      return `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.note ? `<span class="item-mod">${item.note}</span>` : ''}</div><div class="item-sizes">${item.sizes.map(s => `${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ')}</div></div>`;
     }
+    const desc = item.description ? (item.special ? item.description.split(' · ').join('<br>') : item.description) : null;
+    return `<div class="${cls}"><div class="item-top"><span class="item-name">${item.name}</span>${item.badge ? `<span class="badge">${item.badge}</span>` : ''}<span style="flex:1"></span>${item.price ? `<span class="item-price">$${item.price}</span>` : ''}</div>${desc ? `<div class="item-desc">${desc}</div>` : ''}${item.levels && item.levels.length ? `<div class="lit-levels">${item.levels.map(l => `<span class="lit-level">${l}</span>`).join('')}</div>` : ''}${item.note && !item.sizes && !item.levels ? `<div class="item-note">${item.note}</div>` : ''}</div>`;
+  }
 
-    // ── Render helpers ────────────────────────────────────
-    function sizesHTML(sizes) {
-      return sizes.map(s => `${s.label}&nbsp;<b>$${s.price}</b>`).join(' &middot; ');
-    }
-
-    function itemHTML(item) {
-      const cls = ['item', item.special && 'special', item.soldOut && 'sold-out']
-        .filter(Boolean).join(' ');
-
-      if (item.sizes && item.sizes.length) {
-        return `
-          <div class="${cls}">
-            <div class="item-top">
-              <span class="item-name">${item.name}</span>
-              ${item.note ? `<span class="item-mod">${item.note}</span>` : ''}
-            </div>
-            <div class="item-sizes">${sizesHTML(item.sizes)}</div>
-          </div>`;
+  function sectionHTML(section) {
+    const visible = section.items.filter(i => !i.hidden);
+    let html = `<div class="sec-title">${section.title}</div>${section.note ? `<span class="sec-note">${section.note}</span>` : ''}<div class="sec-rule"></div>`;
+    let lastSub = null;
+    visible.forEach(item => {
+      if (item.subCategory && item.subCategory !== lastSub) {
+        lastSub = item.subCategory;
+        const n = item.subCategoryNote ? `<span class="sub-note">${item.subCategoryNote}</span>` : '';
+        html += `<div class="sub-label">${item.subCategory}${n}</div>`;
       }
+      html += itemHTML(item);
+    });
+    return html;
+  }
 
-      return `
-        <div class="${cls}">
-          <div class="item-top">
-            <span class="item-name">${item.name}</span>
-            ${item.badge ? `<span class="badge">${item.badge}</span>` : ''}
-            <span style="flex:1"></span>
-            ${item.price ? `<span class="item-price">$${item.price}</span>` : ''}
-          </div>
-          ${item.description ? `<div class="item-desc">${item.description}</div>` : ''}
-          ${item.levels && item.levels.length ? `<div class="lit-levels">${item.levels.map(l => `<span class="lit-level">${l}</span>`).join('')}</div>` : ''}
-          ${item.note && !item.sizes && !item.levels ? `<div class="item-note">${item.note}</div>` : ''}
-        </div>`;
+  let currentMenu = null;
+  let showingLunch = false;
+
+  function resolvedLunch(menu) {
+    const override = menu.portraitRight || 'auto';
+    if (override === 'breakfast') return false;
+    if (override === 'lunch')     return true;
+    return isLunchTime();
+  }
+
+  function render(menu) {
+    currentMenu = menu;
+    const byId = {};
+    menu.sections.forEach(s => { byId[s.id] = s; });
+
+    document.getElementById('col-left').innerHTML = sectionHTML(byId['coffee']);
+
+    const lunch = resolvedLunch(menu);
+    let rightHTML = sectionHTML(lunch ? byId['lunch'] : byId['breakfast']);
+    if (byId['bakery']) rightHTML += '<div class="sec-divider">' + sectionHTML(byId['bakery']) + '</div>';
+    document.getElementById('col-right').innerHTML = rightHTML;
+    showingLunch = lunch;
+  }
+
+  // Check every 10s if the right column needs to flip breakfast→lunch
+  setInterval(() => {
+    if (!currentMenu) return;
+    if ((currentMenu.portraitRight || 'auto') !== 'auto') return;
+    const lunch = isLunchTime();
+    if (lunch !== showingLunch) {
+      const col = document.getElementById('col-right');
+      col.classList.add('switching');
+      setTimeout(() => { render(currentMenu); col.classList.remove('switching'); }, 600);
     }
+  }, 10000);
 
-    function sectionHTML(section) {
-      const visibleItems = section.items.filter(i => !i.hidden);
-      let html = `
-        <div class="sec-title">${section.title}</div>
-        ${section.note ? `<span class="sec-note">${section.note}</span>` : ''}
-        <div class="sec-rule"></div>`;
+  function applyTheme(key) {
+    document.getElementById('theme-vars').textContent = (THEMES[key] || THEMES.dark).css;
+  }
 
-      let lastSub = null;
-      visibleItems.forEach(item => {
-        if (item.subCategory && item.subCategory !== lastSub) {
-          lastSub = item.subCategory;
-          const noteSpan = item.subCategoryNote
-            ? `<span class="sub-note">${item.subCategoryNote}</span>` : '';
-          html += `<div class="sub-label">${item.subCategory}${noteSpan}</div>`;
-        }
-        html += itemHTML(item);
-      });
-
-      return html;
-    }
-
-    // ── Render both columns ───────────────────────────────
-    let currentMenu = null;
-    let showingLunch = false;
-
-    function render(menu) {
-      currentMenu = menu;
-      const byId = {};
-      menu.sections.forEach(s => { byId[s.id] = s; });
-
-      // Left column: always Coffee
-      document.getElementById('col-left').innerHTML =
-        sectionHTML(byId['coffee']);
-
-      // Right column: Breakfast or Lunch based on time
-      const lunch = isLunchTime();
-      const rightSection = lunch ? byId['lunch'] : byId['breakfast'];
-      document.getElementById('col-right').innerHTML = sectionHTML(rightSection);
-      showingLunch = lunch;
-    }
-
-    // ── Check if column needs to switch ──────────────────
-    setInterval(() => {
-      if (!currentMenu) return;
-      const lunch = isLunchTime();
-      if (lunch !== showingLunch) {
-        // Fade out, swap, fade in
-        const col = document.getElementById('col-right');
-        col.classList.add('switching');
-        setTimeout(() => {
-          render(currentMenu);
-          col.classList.remove('switching');
-        }, 600);
-      }
-    }, 10000); // check every 10 seconds
-
-    // ── Theme ─────────────────────────────────────────────
-    function applyTheme(key) {
-      const theme = THEMES[key] || THEMES.dark;
-      document.getElementById('theme-vars').textContent = theme.css;
-    }
-
-    // ── Data loading — polls server every 30s ─────────────
-    function loadMenu() {
-      fetch('/api/menu')
-        .then(r => r.json())
-        .then(data => {
-          const menu = normalizeMenu(data);
-          applyTheme(menu.theme);
-          render(menu);
-        })
-        .catch(() => render(DEFAULT_MENU));
-    }
-    loadMenu();
-    setInterval(loadMenu, 30000);
-  </script>
+  function loadMenu() {
+    fetch('/api/menu')
+      .then(r => r.json())
+      .then(data => {
+        const menu = normalizeMenu(data);
+        applyTheme(menu.themes ? menu.themes.portrait : 'dark');
+        render(menu);
+      })
+      .catch(() => render(DEFAULT_MENU));
+  }
+  loadMenu();
+  setInterval(loadMenu, 30000);
+</script>
 </body>
 </html>

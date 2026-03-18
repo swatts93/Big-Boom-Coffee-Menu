@@ -13,10 +13,18 @@ const DEFAULT_MENU = {
           id: "drip-coffee",
           name: "Drip Coffee",
           sizes: [
-            { label: "12oz", price: "2.49" },
             { label: "16oz", price: "2.99" },
             { label: "20oz", price: "3.49" },
             { label: "24oz", price: "3.99" }
+          ]
+        },
+        {
+          id: "cold-brew",
+          name: "Signature Cold Brew",
+          sizes: [
+            { label: "16oz", price: "3.99" },
+            { label: "20oz", price: "4.49" },
+            { label: "24oz", price: "4.99" }
           ]
         },
         {
@@ -24,7 +32,6 @@ const DEFAULT_MENU = {
           name: "Latte",
           note: "Hot or Iced",
           sizes: [
-            { label: "12oz", price: "4.49" },
             { label: "16oz", price: "4.99" },
             { label: "20oz", price: "5.49" },
             { label: "24oz", price: "5.99" }
@@ -35,7 +42,6 @@ const DEFAULT_MENU = {
           name: "Mocha",
           note: "Hot or Iced",
           sizes: [
-            { label: "12oz", price: "4.49" },
             { label: "16oz", price: "4.99" },
             { label: "20oz", price: "5.49" },
             { label: "24oz", price: "5.99" }
@@ -45,7 +51,6 @@ const DEFAULT_MENU = {
           id: "americano",
           name: "Americano",
           sizes: [
-            { label: "12oz", price: "3.49" },
             { label: "16oz", price: "3.99" }
           ]
         },
@@ -53,7 +58,7 @@ const DEFAULT_MENU = {
           id: "cappuccino",
           name: "Cappuccino",
           sizes: [
-            { label: "12oz", price: "4.49" }
+            { label: "16oz", price: "4.49" }
           ]
         },
         {
@@ -75,7 +80,7 @@ const DEFAULT_MENU = {
         },
         {
           id: "tea",
-          name: "Tea",
+          name: "Tea (sweet)",
           sizes: [
             { label: "16oz", price: "2.49" },
             { label: "20oz", price: "2.79" },
@@ -94,19 +99,18 @@ const DEFAULT_MENU = {
           id: "bottled-drinks",
           name: "Bottled Drinks",
           price: "2.25",
-          description: "Pepsi · Pepsi Zero · Coke · Diet Coke · Dr. Pepper · Dr. Pepper Zero · Sunkist · A&W Root Beer Zero · Mountain Dew · Mountain Dew Zero"
+          sectionGap: true
         },
         {
           id: "water",
           name: "Water",
-          price: "1.00",
-          description: "Dasani"
+          price: "1.00"
         },
         {
           id: "kids-drinks",
           name: "Kids Drinks",
           price: "1.50",
-          description: "Motts Apple Juice · Motts Apple White Grape Juice · Sunny D"
+          kidsSep: true
         }
       ]
     },
@@ -282,8 +286,10 @@ function toArray(val) {
 
 function normalizeMenu(data) {
   if (!data || !data.sections) return DEFAULT_MENU;
+  const themes = data.themes || { landscape: data.theme || 'dark', portrait: data.theme || 'dark' };
   return {
-    theme: data.theme || 'dark',
+    themes,
+    portraitRight: data.portraitRight || 'auto',
     sections: toArray(data.sections).map(s => ({
       ...s,
       items: toArray(s.items).map(item => ({

@@ -149,18 +149,31 @@
 
     .app-header .spacer { flex: 1; }
 
-    #theme-select {
+    .theme-group {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .theme-group label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .theme-group select {
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       color: var(--cream);
       font-family: 'Oswald', sans-serif;
-      font-size: 14px;
-      padding: 6px 12px;
+      font-size: 13px;
+      padding: 5px 10px;
       cursor: pointer;
       outline: none;
     }
-    #theme-select:focus { border-color: var(--orange); }
+    .theme-group select:focus { border-color: var(--orange); }
 
     #save-status {
       font-size: 14px;
@@ -423,7 +436,22 @@
     <img src="Logo.jpeg" alt="">
     <h1>Menu Admin</h1>
     <div class="spacer"></div>
-    <select id="theme-select" onchange="setTheme(this.value)"></select>
+    <div class="theme-group">
+      <label>Landscape</label>
+      <select id="theme-landscape" onchange="setTheme('landscape', this.value)"></select>
+    </div>
+    <div class="theme-group">
+      <label>Portrait</label>
+      <select id="theme-portrait" onchange="setTheme('portrait', this.value)"></select>
+    </div>
+    <div class="theme-group">
+      <label>Portrait Right</label>
+      <select id="portrait-right" onchange="setPortraitRight(this.value)">
+        <option value="auto">⏱ Auto (time)</option>
+        <option value="breakfast">🍳 Breakfast</option>
+        <option value="lunch">🥗 Lunch</option>
+      </select>
+    </div>
     <div id="save-status">Not connected</div>
   </div>
 
@@ -449,7 +477,7 @@
       <div class="field-row">
         <div class="field">
           <label>Price</label>
-          <input type="text" id="f-price" placeholder="e.g. 6.49">
+          <input type="text" id="f-price" placeholder="e.g. 6.49" oninput="onPriceChange()">
         </div>
         <div class="field">
           <label>Sub-category (optional)</label>
@@ -518,7 +546,8 @@
   // ── State ───────────────────────────────────────────────
   let menu = JSON.parse(JSON.stringify(DEFAULT_MENU)); // deep copy
   let activeSectionIndex = 0;
-  let editingItemId = null;  // null = adding new
+  let editingItemId = null;       // null = adding new
+  let editingOriginalBadge = null; // tracks badge before editing
 
   // ── Login ───────────────────────────────────────────────
   function doLogin() {
@@ -571,22 +600,32 @@
   }
 
   // ── Theme picker ─────────────────────────────────────────
-  function buildThemeSelect(currentKey) {
-    const sel = document.getElementById('theme-select');
-    sel.innerHTML = Object.entries(THEMES)
+  function buildThemeSelects(themes) {
+    const opts = Object.entries(THEMES)
       .map(([key, t]) => `<option value="${key}">${t.emoji} ${t.name}</option>`)
       .join('');
-    sel.value = currentKey || 'dark';
+    ['landscape', 'portrait'].forEach(layout => {
+      const sel = document.getElementById('theme-' + layout);
+      sel.innerHTML = opts;
+      sel.value = (themes && themes[layout]) || 'dark';
+    });
   }
 
-  function setTheme(key) {
-    menu.theme = key;
+  function setTheme(layout, key) {
+    if (!menu.themes) menu.themes = { landscape: 'dark', portrait: 'dark' };
+    menu.themes[layout] = key;
+    saveToServer();
+  }
+
+  function setPortraitRight(val) {
+    menu.portraitRight = val;
     saveToServer();
   }
 
   // ── UI ──────────────────────────────────────────────────
   function buildUI(m) {
-    buildThemeSelect(m.theme);
+    buildThemeSelects(m.themes);
+    document.getElementById('portrait-right').value = m.portraitRight || 'auto';
     buildTabs(m);
     renderSection(activeSectionIndex);
   }
@@ -625,9 +664,13 @@
         ? item.sizes.map(s => `${s.label} $${s.price}`).join(' · ')
         : (item.price ? `$${item.price}` : (item.badge || ''));
 
+      const nameDisplay = item.soldOut
+        ? `<span style="text-decoration:line-through;opacity:0.6;">${item.name}</span> <span style="color:var(--rust);font-size:12px;font-family:'Oswald',sans-serif;letter-spacing:1px;">SOLD OUT</span>`
+        : `${item.name}${item.hidden ? ' <span style="color:var(--muted);font-size:12px;">[hidden]</span>' : ''}`;
+
       row.innerHTML = `
         <div class="item-info">
-          <div class="name">${item.name}${item.hidden ? ' <span style="color:var(--muted);font-size:12px;">[hidden]</span>' : ''}</div>
+          <div class="name">${nameDisplay}</div>
           <div class="desc">${item.description || item.note || ''}</div>
         </div>
         <div class="price-tag">${priceDisplay}</div>
@@ -682,9 +725,11 @@
     toggleSizesMode(false);
     document.getElementById('sizes-list').innerHTML = '';
     addSizeRow();
+    editingOriginalBadge = null;
   }
 
   function populateForm(item) {
+    editingOriginalBadge = item.badge || null;
     document.getElementById('f-name').value = item.name || '';
     document.getElementById('f-badge').value = item.badge || '';
     document.getElementById('f-soldout').checked = !!item.soldOut;
@@ -791,6 +836,17 @@
 
   function slugify(str) {
     return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+
+  // ── Soup price ↔ badge logic ──────────────────────────
+  // When an item's original badge is "Coming Soon!":
+  //   entering a price → clears the badge
+  //   clearing the price → restores "Coming Soon!"
+  function onPriceChange() {
+    if (editingOriginalBadge !== 'Coming Soon!') return;
+    const price = document.getElementById('f-price').value.trim();
+    const hasPrice = price !== '' && price !== '0' && price !== '0.00';
+    document.getElementById('f-badge').value = hasPrice ? '' : 'Coming Soon!';
   }
 </script>
 </body>

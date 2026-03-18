@@ -57,14 +57,31 @@ html, body {
 }
 
 /* ── Sold-out overlay ────────────────────────────────────── */
-.sold-out {
-  opacity: 0.38;
+.item.sold-out {
+  opacity: 0.45;
+  position: relative;
 }
-.sold-out .item-name::after {
-  content: ' — SOLD OUT';
+.item.sold-out .item-name {
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,255,255,0.6);
+}
+.item.sold-out::after {
+  content: 'SOLD OUT';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-family: 'Oswald', sans-serif;
-  font-size: 0.7em;
-  letter-spacing: 1.5px;
-  color: var(--rust);
-  font-style: normal;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #fff;
+  background: rgba(180, 30, 10, 0.92);
+  border: 2px solid rgba(255,80,50,0.75);
+  padding: 4px 16px;
+  border-radius: 4px;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  z-index: 5;
 }
